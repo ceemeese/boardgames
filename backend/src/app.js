@@ -15,8 +15,27 @@ const db = knex({
     useNullAsDefault: true
 })
 
-app.get('/boardgames', (req, res) => {
-    res.json(boardgames);
+app.get('/boardgames', async (req, res) => {
+    const data = await db('boardgames').select('*');
+    res.json(data);
+});
+
+app.get('/boardgames/:id', async (req, res) => {
+    const data = await db('boardgames').select('*').where({id : req.params.id});
+    res.json(data);
+});
+    
+
+app.post('/boardgames', async (req, res) => {
+
+    await db('boardgames').insert({
+        name: req.body.name,
+        description: req.body.description,
+        minPlayers: req.body.minPlayers,
+        maxPlayers: req.body.maxPlayers,
+        category: req.body.category
+    });
+    res.status(201).json({});
 });
 
 
