@@ -1,17 +1,19 @@
 const express = require('express');
 const cors = require('cors')
+const knex= require('knex');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const boardgames = [
-    {
-        "title": "Bang" ,
-        "maxPlayers": 10,
-        "description": "Lorem ipsum dolor sit amet consectetur, adipiscing elit massa molestie, integer pretium scelerisque ac."
-    }
-];
+//conexión con la db
+const db = knex({
+    client: 'sqlite3',
+    connection: {
+        filename: 'boardgames.db'
+    },
+    useNullAsDefault: true
+})
 
 app.get('/boardgames', (req, res) => {
     res.json(boardgames);
