@@ -139,6 +139,41 @@ app.delete('/games/:id', async (req, res) => {
 
 
 
+//GAME USERS
+app.get('/games-details', async (req, res) => {
+    const data = await db('gamesUsers').select('*');
+    res.json(data);
+});
+
+app.get('/games-details/:id', async (req, res) => {
+    const data = await db('gamesUsers').select('*').where({id : req.params.id}).first();
+    res.json(data);
+});
+
+app.post('/games/:gameId/users', async (req, res) => {
+
+    await db('gamesUsers').insert({
+        gameId: req.params.gameId,
+        userId: req.body.userId
+    });
+    res.status(201).json({});
+});
+//solo modificar usuario
+app.put('/games/:gameId/users/:userId', async (req, res) => {
+
+    await db('gamesUsers').update({
+        userId: req.body.newUserId
+    }).where({ gameId: req.params.gameId, userId: req.params.userId})
+    res.status(204).json({});
+});
+
+app.delete('/games-details/:id', async (req, res) => {
+    await db('gamesUsers').delete().where({id : req.params.id});
+    res.status(204).json({});
+});
+
+
+
 
 
 app.listen(8080, () => {
