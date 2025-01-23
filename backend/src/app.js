@@ -22,13 +22,11 @@ app.get('/boardgames', async (req, res) => {
     res.json(data);
 });
 
-
 app.get('/boardgames/:id', async (req, res) => {
     const data = await db('boardgames').select('*').where({id : req.params.id}).first();
     res.json(data);
 });
     
-
 app.post('/boardgames', async (req, res) => {
 
     await db('boardgames').insert({
@@ -41,7 +39,6 @@ app.post('/boardgames', async (req, res) => {
     res.status(201).json({});
 });
 
-
 app.put('/boardgames/:id', async (req, res) => {
 
     await db('boardgames').update({
@@ -53,7 +50,6 @@ app.put('/boardgames/:id', async (req, res) => {
     }).where({id: req.params.id})
     res.status(204).json({});
 });
-
 
 app.delete('/boardgames/:id', async (req, res) => {
     await db('boardgames').delete().where({id : req.params.id});
@@ -70,12 +66,10 @@ app.get('/users', async (req, res) => {
     res.json(data);
 });
 
-
 app.get('/users/:id', async (req, res) => {
     const data = await db('users').select('*').where({id : req.params.id}).first();
     res.json(data);
 });
-
 
 app.post('/users', async (req, res) => {
 
@@ -89,7 +83,6 @@ app.post('/users', async (req, res) => {
     res.status(201).json({});
 });
 
-
 app.put('/users/:id', async (req, res) => {
 
     await db('users').update({
@@ -102,7 +95,6 @@ app.put('/users/:id', async (req, res) => {
     res.status(204).json({});
 });
 
-
 app.delete('/users/:id', async (req, res) => {
     await db('users').delete().where({id : req.params.id});
     res.status(204).json({});
@@ -110,6 +102,40 @@ app.delete('/users/:id', async (req, res) => {
 
 
 
+
+//GAME
+app.get('/games', async (req, res) => {
+    const data = await db('games').select('*');
+    res.json(data);
+});
+
+app.get('/games/:id', async (req, res) => {
+    const data = await db('games').select('*').where({id : req.params.id}).first();
+    res.json(data);
+});
+
+app.post('/games', async (req, res) => {
+
+    await db('games').insert({
+        name: req.body.name,
+        boardgameId: req.body.boardgameId
+    });
+    res.status(201).json({});
+});
+
+app.put('/games/:id', async (req, res) => {
+
+    await db('games').update({
+        name: req.body.name,
+        boardgameId: req.body.boardgameId,
+    }).where({id: req.params.id})
+    res.status(204).json({});
+});
+
+app.delete('/games/:id', async (req, res) => {
+    await db('games').delete().where({id : req.params.id});
+    res.status(204).json({});
+});
 
 
 
