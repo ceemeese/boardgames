@@ -26,9 +26,8 @@ function deleteBoardgame(boardgameId) {
 
     axios.delete(`http://localhost:8080/boardgames/${boardgameId}`)
         .then((response) => {
-            readBoardgames();
             console.log('Juego eliminado con éxito');
-            const deleteButton = document.getElementById(`btn-del-${boardgameId}`);
+            getListBoardgames();
         })
         .catch((error) => {
             if (error.response) {
@@ -61,7 +60,7 @@ const drawData = (boardgamesList) => {
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a href="" type="button" class="btn btn-sm btn-outline-secondary">Ver</a>
-                                <a href="/boardgames/${boardgame.id}/edit" type="button" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a href="./edit-boardgame.html?id=${boardgame.id}" type="button" class="btn btn-sm btn-outline-secondary">Editar</a>
                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="" id="del-btn-${boardgame.id}">Eliminar</button>
                             </div>
                             <small class="text-body-secondary">${boardgame.category}</small>
@@ -76,7 +75,7 @@ const drawData = (boardgamesList) => {
         const deleteButton = document.getElementById(`del-btn-${boardgame.id}`);
         deleteButton.addEventListener('click', (event) => {
             event.preventDefault();
-            deleteBoardgame(id);
+            deleteBoardgame(boardgame.id);
         });        
 
     });
