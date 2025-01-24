@@ -57,13 +57,15 @@ const drawData = (boardgamesList) => {
                     <img alt="${boardgame.name}" width="100%" height="225"/>
                     <div class="card-body">
                         <p class="card-text">${boardgame.name}</p>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <small>${boardgame.description}</small></br>
+                        <small>Categoria:${boardgame.category}</small></br>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
                             <div class="btn-group">
                                 <a href="" type="button" class="btn btn-sm btn-outline-secondary">Ver</a>
                                 <a href="./edit-boardgame.html?id=${boardgame.id}" type="button" class="btn btn-sm btn-outline-secondary">Editar</a>
                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="" id="del-btn-${boardgame.id}">Eliminar</button>
                             </div>
-                            <small class="text-body-secondary">${boardgame.category}</small>
+                            <small class="text-body-secondary">${boardgame.minPlayers} - ${boardgame.maxPlayers} jugadores</small>
                         </div>
                     </div>
                 </div>

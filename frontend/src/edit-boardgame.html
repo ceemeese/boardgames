@@ -50,57 +50,45 @@
 
     <main>
         <section class="py-5 text-center container">
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">El rincón de los juegos de mesa</h1>
-                    <p class="lead text-body-secondary">El rincón ideal para amantes de los juegos de mesa. Descubre, conecta y disfruta partidas inolvidables.</p>
-                </div>
-            </div>
         </section>
-
-
-
-        <main>
-            <section class="py-5 text-center container">
-            </section>
-        
-            <section class="container">
-                <form class="form" method="post" enctype="multipart/form-data" id="form" >
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label class="form-label" for="name">Nombre</label>
-                            <input type="text" name="name" class="form-control" id="name">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="form-label" for="category">Categoría</label>
-                            <input type="text" name="category" class="form-control" id="category">
-                        </div>
+    
+        <section class="container">
+            <form class="form" method="post" enctype="multipart/form-data" id="form" >
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="name">Nombre</label>
+                        <input type="text" name="name" class="form-control" id="name">
                     </div>
-                    <div class="form-group mt-1">
-                        <label class="form-label" for="description">Descripción</label>
-                        <textarea class="form-control" name="description" id="description" rows="2"></textarea>
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="category">Categoría</label>
+                        <input type="text" name="category" class="form-control" id="category">
+                    </div>
+                </div>
+                <div class="form-group mt-1">
+                    <label class="form-label" for="description">Descripción</label>
+                    <textarea class="form-control" name="description" id="description" rows="2"></textarea>
+                </div>
+                <div class="col">
+                    <label for="image2" class="form-label">Foto</label>
+                    <input type="file" name="image2" class="form-control" id="image2">
+                </div>
+                <div class="row mt-1">
+                    <div class="col">
+                        <label for="minPlayers" class="form-label">Número mínimo de jugadores</label>
+                        <input type="number" name="minPlayers" class="form-control" id="minPlayers">
                     </div>
                     <div class="col">
-                        <label for="image2" class="form-label">Foto</label>
-                        <input type="file" name="image2" class="form-control" id="image2">
+                        <label for="maxPlayers" class="form-label">Número máximo de jugadores</label>
+                        <input type="number" name="maxPlayers" class="form-control" id="maxPlayers">
                     </div>
-                    <div class="row mt-1">
-                        <div class="col">
-                            <label for="minPlayers" class="form-label">Número mínimo de jugadores</label>
-                            <input type="text" name="minPlayers" class="form-control" id="minPlayers">
-                        </div>
-                        <div class="col">
-                            <label for="maxPlayers" class="form-label">Número máximo de jugadores</label>
-                            <input type="text" name="maxPlayers" class="form-control" id="maxPlayers">
-                        </div>
-                    </div>
-                    <input type="submit" value="Enviar" id="edit-button" class="btn btn-success mt-3"/>
-                    <input type="hidden" name="boardgameId" value="">
-                </form>
-                <br/>
-                <div id="result"></div>
-            </section>
-        </main>
+                </div>
+                <input type="submit" value="Enviar" id="edit-button" class="btn btn-success mt-3"/>
+                <input type="hidden" name="boardgameId" value="">
+            </form>
+            <br/>
+            <div id="result"></div>
+        </section>
+    </main>
     
     
     

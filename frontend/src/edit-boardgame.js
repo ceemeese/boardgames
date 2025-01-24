@@ -7,10 +7,17 @@ const boardgameId = urlParams.get('id');
 console.log(boardgameId);
 
 document.addEventListener('DOMContentLoaded', function() {
+    const header = document. createElement("h1");
+    const sectionHeader = document.querySelector('section')
     
     if(boardgameId != null) {
         getBoardgame(boardgameId);
+        header.innerHTML = "Modificar juego"
+        sectionHeader.appendChild(header);
     }
+
+    header.innerHTML = "Añadir juego"
+    sectionHeader.appendChild(header)
 
     console.log('Hola script principal')
 });
@@ -101,6 +108,13 @@ form.addEventListener('submit', function (event){
     event.preventDefault();
 
     const inputsForm = getFormData();
+
+    const isValid = validationForm(inputsForm);
+
+    if (!isValid) {
+        return;
+    }
+
     if(boardgameId != null) {
         updateBoardgame(inputsForm);
 
@@ -108,6 +122,36 @@ form.addEventListener('submit', function (event){
         postBoardgame(inputsForm);
     }
 });
+
+
+
+function validationForm(boardgame) {
+
+    const minPlayers = parseInt(boardgame.minPlayers, 10);
+    const maxPlayers = parseInt(boardgame.maxPlayers, 10);
+
+    if (!boardgame.name || boardgame.name.trim() === '') {
+        notifyKO('El nombre no puede estar vacío')
+        return false;
+    }
+
+    if (isNaN(minPlayers) || maxPlayers <= 0) {
+        notifyKO('El número mínimo de jugadores debe ser un número mayor que 0.')
+        return false;
+    }
+
+    if (isNaN(maxPlayers) || maxPlayers <= 0) {
+        notifyKO('El número máximo de jugadores debe ser un número mayor que 0.')
+        return false;
+    }
+
+    if (minPlayers > maxPlayers) {
+        notifyKO('El número mínimo de jugadores no puede ser mayor al máximo.')
+        return false;
+    }
+
+    return true;
+}
 
 
 
