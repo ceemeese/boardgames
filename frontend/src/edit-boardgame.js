@@ -8,7 +8,7 @@ console.log(boardgameId);
 
 document.addEventListener('DOMContentLoaded', function() {
     const header = document. createElement("h1");
-    const sectionHeader = document.querySelector('section')
+    const sectionHeader = document.getElementById('sectionBoardgames')
     
     if(boardgameId != null) {
         getBoardgame(boardgameId);
