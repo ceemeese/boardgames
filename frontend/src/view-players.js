@@ -49,7 +49,7 @@ function drawDataUsers(users) {
         const tdActions = document.createElement('td');
 
         const editButton = document.createElement('a');
-        editButton.href = `./edit-user.html?id=${user.id}`;
+        editButton.href = `/edit-user.html?id=${user.id}`;
         editButton.type = 'button';
         editButton.className = 'btn btn-sm btn-outline-secondary me-2';
         editButton.textContent = 'Editar';

@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
         getBoardgame(boardgameId);
         header.innerHTML = "Modificar juego"
         sectionHeader.appendChild(header);
+    } else {
+        header.innerHTML = "Añadir juego"
+    sectionHeader.appendChild(header);
     }
-
-    header.innerHTML = "Añadir juego"
-    sectionHeader.appendChild(header)
 
     console.log('Hola script principal')
 });
