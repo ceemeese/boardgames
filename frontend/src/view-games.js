@@ -73,9 +73,34 @@ function drawDataGames(games) {
         const deleteButton = document.getElementById(`del-btn-${game.id}`);
         deleteButton.addEventListener('click', (event) => {
         event.preventDefault();
-        deleteUser(game.id);
+        deleteGame(game.id);
         });
 
     });
+
+
+function deleteGame(gameId) {
+
+    axios.delete(`http://localhost:8080/games/${gameId}`)
+        .then((response) => {
+            console.log('Partida eliminada con éxito');
+            notifyOK('Partida eliminada correctamente');
+            getListGames();
+        })
+        .catch((error) => {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    console.error('404, partida no encontrada');
+                } else if (error.response.status === 500) {
+                    console.error('500, Error interno del servidor');
+            } else {
+                console.error('Error al realizar la solicitud:', error.message);
+            }
+        }
+    })
+}
+
+
+
 
 }
