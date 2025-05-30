@@ -87,10 +87,10 @@ app.put('/users/:id', async (req, res) => {
 
     await db('users').update({
         name: req.body.name,
-        surname: req.body.description,
-        email: req.body.minPlayers,
-        alias: req.body.maxPlayers,
-        password: req.body.category
+        surname: req.body.surname,
+        email: req.body.email,
+        alias: req.body.alias,
+        password: req.body.password,
     }).where({id: req.params.id})
     res.status(204).json({});
 });
@@ -132,11 +132,11 @@ app.get('/games/:id', async (req, res) => {
 
 app.post('/games', async (req, res) => {
 
-    await db('games').insert({
+    const data = await db('games').insert({
         name: req.body.name,
         boardgameId: req.body.boardgameId
     });
-    res.status(201).json({});
+    res.status(201).json(data);
 });
 
 app.put('/games/:id', async (req, res) => {
@@ -166,13 +166,13 @@ app.get('/games-details/:id', async (req, res) => {
     res.json(data);
 });
 
-app.post('/games/:gameId/users', async (req, res) => {
+app.post('/games-details/:gameId/users', async (req, res) => {
 
-    await db('gamesUsers').insert({
+    const [newGameId] = await db('gamesUsers').insert({
         gameId: req.params.gameId,
         userId: req.body.userId
     });
-    res.status(201).json({});
+    res.status(201).json({id: newGameId});
 });
 //solo modificar usuario
 app.put('/games/:gameId/users/:userId', async (req, res) => {
