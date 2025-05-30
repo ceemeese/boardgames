@@ -109,6 +109,22 @@ app.get('/games', async (req, res) => {
     res.json(data);
 });
 
+
+app.get('/game-info', async (req, res) => {
+    const data = await db('games')
+        .join('boardgames', 'games.boardgameId', 'boardgames.id')
+        .leftJoin('gamesUsers', 'games.id', 'gamesUsers.gameId')
+        .select(
+            'games.id',
+            'games.name',
+            'games.boardgameId',
+            'boardgames.name as boardgameName'
+        )
+        .count('gamesUsers.userId as numPlayers')
+        .groupBy('games.id', 'boardgames.name')
+    res.json(data);
+});
+
 app.get('/games/:id', async (req, res) => {
     const data = await db('games').select('*').where({id : req.params.id}).first();
     res.json(data);
