@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then (newGame => {
             console.log('Nueva partida creada:', newGame);
-            return postGameUsers(inputsForm.players, newGame.id);
+            return postGameUsers(inputsForm.players, newGame);
         })
         .then ( () => {
             notifyOK('Partida y jugadores registrados correctamente');
@@ -210,8 +210,6 @@ function validationForm(game) {
         notifyKO('Debe tener un juego asociado')
         return false;
     }
-
-
 
     return true;
 }
