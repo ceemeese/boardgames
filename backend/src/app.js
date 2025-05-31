@@ -149,7 +149,7 @@ app.put('/games/:id', async (req, res) => {
 });
 
 app.delete('/games/:id', async (req, res) => {
-    //await db('gameUsers').where({ gameId : req.params.id }).del();
+    await db('gamesUsers').delete().where({gameId : req.params.id});
     await db('games').delete().where({id : req.params.id});
     res.status(204).json({});
 });
