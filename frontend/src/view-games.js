@@ -1,14 +1,25 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
 
+currentMaxPlayers = 0;
+
 document.addEventListener('DOMContentLoaded', function() {
+    getListBoardgames();
     getListGames();
-
-
-
 
     console.log('Hola script view-games')
 });
+
+function getListBoardgames(selectedBoardgameId = null) {
+    axios.get('http://localhost:8080/boardgames')
+        .then((response) => {
+            boardgamesList = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching boardgames:', error);
+        }
+    )
+}
 
 
 
@@ -38,13 +49,15 @@ function drawDataGames(games) {
         const tdName = document.createElement('td');
         tdName.textContent = game.name;
 
-        //TODO getNombreJuego
         const tdBoardgame = document.createElement('td');
         tdBoardgame.textContent = game.boardgameName;
 
-        //TODO numero jugadores
+        //jugadores máximos
+        const boardgame = boardgamesList.find(bg => bg.id === game.boardgameId);
+        const maxPlayers = boardgame ? boardgame.maxPlayers : '?';
+
         const tdUsers = document.createElement('td');
-        tdUsers.textContent = game.numPlayers;
+        tdUsers.textContent = game.numPlayers + ' de ' + maxPlayers;
 
         const tdActions = document.createElement('td');
 
