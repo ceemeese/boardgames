@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sectionHeader = document.getElementById('sectionGames')
 
     if(gameId != null) {
-        getBoardgame(gameId);
+        getGame(gameId);
         header.innerHTML = "Modificar partida"
         sectionHeader.appendChild(header);
     } else {
@@ -57,12 +57,25 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Hola script principal')
 });
 
+//OBTENER PARTIDA PARA MODIFICAR
+function getGame(gameId) {
+    axios.get(`http://localhost:8080/game-info/${gameId}`)
+        .then((response) => {
+            console.log(response.data);
+            drawGameData(response.data);
+        })
+    
+        .catch((error) => {
+            console.error('Error fetching game:', error);
+        }
+    )
+}
 
-
-function getListBoardgames() {
+//OBTENER TODOS LOS JUEGOS
+function getListBoardgames(selectedBoardgameId = null) {
     axios.get('http://localhost:8080/boardgames')
         .then((response) => {
-            showBoardGamesList(response.data);
+            showBoardGamesList(response.data, selectedBoardgameId);
             console.log(response.data);
         })
         .catch((error) => {
@@ -71,7 +84,7 @@ function getListBoardgames() {
     )
 }
 
-
+//OBTENER TODOS LOS USUARIOS
 function getListUsers() {
     axios.get('http://localhost:8080/users')
         .then((response) => {
@@ -84,8 +97,21 @@ function getListUsers() {
     )
 }
 
+//OBTENER USUARIOS DE PARTIDA ESPECIFICA
+function getListUsersFromGame(game) {
+        axios.get(`http://localhost:8080/game-info/${game.id}/players`)
+        .then((response) => {
+            markSelectedPlayers(response.data);
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.error('Error fetching users:', error);
+        }
+    )
+}
 
-//MOSTRAS LISTADO USUARIOS EN FORM PARA EL SELECT
+
+//MOSTRAS LISTADO TODOS USUARIOS EN FORM PARA EL SELECT. SIEMPRE SE MUESTRAN TODOS
 function showPlayersList(users) {
 
     const selectPlayer = document.querySelector('#players');
@@ -104,9 +130,20 @@ function showPlayersList(users) {
     });
 }
 
+//OBTENER ARRAY SELECCIONADO DE MULTISELECT
+function getSelectedPlayers() {
+    const select = document.querySelector('#players');
+    console.log(select.selectedOptions);
+    
+    return Array.from(select.selectedOptions).map(option => option.value);
+}
+
+
+
+
 
 //MOSTRAR LISTADO JUEGOS EN FORM PARA EL SELECT
-function showBoardGamesList(boardgames) {
+function showBoardGamesList(boardgames, selectedBoardgameId = null) {
 
     const selectBoardgame = document.querySelector('#boardgames');
 
@@ -114,8 +151,12 @@ function showBoardGamesList(boardgames) {
         
         const optionBoardgames = document.createElement('option');
 
-        optionBoardgames.setAttribute('value', boardgame.id);
+        optionBoardgames.value = boardgame.id;
         optionBoardgames.textContent = boardgame.name;
+
+        if (selectedBoardgameId && boardgame.id == selectedBoardgameId) {
+            option.selected = true;
+        }
 
         selectBoardgame.appendChild(optionBoardgames);
 
@@ -123,7 +164,7 @@ function showBoardGamesList(boardgames) {
 
 }
 
-
+//REGISTRAR PARTIDA
 function postGame(datos) {
     console.log('Datos enviados al backend:', datos);
     return axios.post('http://localhost:8080/games', datos)
@@ -138,7 +179,7 @@ function postGame(datos) {
         })
 }
 
-
+//REGISTRAR USUARIOS EN PARTIDA
 function postGameUsers(players, gameId) {
     console.log('Datos enviados al backend', {players, gameId});
 
@@ -160,22 +201,60 @@ function postGameUsers(players, gameId) {
 
 
 
+
 //SHOW DATA CUANDO SEA MODIFICAR
-function drawGameData() {
+function drawGameData(game) {
     const nameInput = document.getElementById('name');
-    console.log("nameinput", nameInput);
-    const boardgameInput = document.getElementById('boardgames');
-    console.log("boardgameinput", boardgameInput);
-    const playersInput = document.getElementById('players');
-    console.log("playerinput", playersInput);
 
     if (nameInput) nameInput.value = game.name;
-    if (boardgameInput) boardgameInput.value = game.name;
-    if (playersInput) playersInput.value = game.players;
+    console.log(nameInput.value);
+    
+    markSelectedGame(game.boardgameId);
+    getListUsersFromGame(game);;
 
-
+    
+    
     console.log('Datos de partida cargados:', game);
 }
+
+
+//MARCAR BOARDGAME ACTIVO AL MODIFICAR
+function markSelectedGame(boardgameIdFromGame) {
+    const boardgameInput = document.getElementById('boardgames');
+
+    if (boardgameInput)
+    {
+        // Limpia selecciones anteriores
+        Array.from(boardgameInput.options).forEach(opt => opt.selected = false); 
+        const optionToSelect = Array.from(boardgameInput.options).find(opt => opt.value == boardgameIdFromGame);
+        if (optionToSelect) {
+            optionToSelect.selected = true;
+        }
+    }
+}
+
+
+//MARCAR USUARIOS ACTIVOS DE PARTIDA AL MODIFICAR
+function markSelectedPlayers(playersFromGame) {
+    const select = document.querySelector('#players');
+
+    // Limpia selección anterior
+    for (const option of select.options) {
+        option.selected = false;
+    }
+
+    playersFromGame.forEach(player => {
+        const optionToSelect = Array.from(select.options).find(opt => opt.value == player.id);
+        if (optionToSelect) {
+            optionToSelect.selected = true;
+        }
+    });
+}
+
+
+
+
+
 
 
 //OBTENER DATOS FORMULARIO
@@ -186,17 +265,6 @@ function getFormData() {
         players: getSelectedPlayers()
     };
 }
-
-//OBTENER ARRAY DE MULTISELECT
-function getSelectedPlayers() {
-    const select = document.querySelector('#players');
-    console.log(select.selectedOptions);
-    
-    return Array.from(select.selectedOptions).map(option => option.value);
-}
-
-
-
 
 //VALIDACION DE FORMULARIO
 function validationForm(game) {

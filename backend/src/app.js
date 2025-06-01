@@ -104,9 +104,13 @@ app.delete('/users/:id', async (req, res) => {
 
 
 //GAME
-app.get('/games', async (req, res) => {
-    const data = await db('games').select('*');
-    res.json(data);
+app.get('/game-info/:id/players', async (req, res) => {
+    const players = await db('gamesUsers')
+        .join('users', 'gamesUsers.userId', 'users.id')
+        .select('users.id', 'users.alias')
+        .where('gamesUsers.gameId',req.params.id)
+
+    res.json(players);
 });
 
 
@@ -122,6 +126,24 @@ app.get('/game-info', async (req, res) => {
         )
         .count('gamesUsers.userId as numPlayers')
         .groupBy('games.id', 'boardgames.name')
+    res.json(data);
+});
+
+
+app.get('/game-info/:id', async (req, res) => {
+    const data = await db('games')
+        .join('boardgames', 'games.boardgameId', 'boardgames.id')
+        .leftJoin('gamesUsers', 'games.id', 'gamesUsers.gameId')
+        .select(
+            'games.id',
+            'games.name',
+            'games.boardgameId',
+            'boardgames.name as boardgameName'
+        )
+        .count('gamesUsers.userId as numPlayers')
+        .where('games.id', req.params.id)
+        .groupBy('games.id', 'boardgames.name')
+        .first();
     res.json(data);
 });
 
