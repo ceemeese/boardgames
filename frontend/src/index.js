@@ -61,7 +61,7 @@ const drawData = (boardgamesList) => {
                         <small>Categoria:${boardgame.category}</small></br>
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <div class="btn-group">
-                                <a href="" type="button" class="btn btn-sm btn-outline-secondary">Ver</a>
+                                <a href="./boardgame-detail.html?id=${boardgame.id}" type="button" class="btn btn-sm btn-outline-secondary">Ver</a>
                                 <a href="./edit-boardgame.html?id=${boardgame.id}" type="button" class="btn btn-sm btn-outline-secondary">Editar</a>
                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="" id="del-btn-${boardgame.id}">Eliminar</button>
                             </div>
