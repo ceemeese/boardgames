@@ -42,7 +42,7 @@ function drawBoardgameData(boardgame) {
                         <li class="list-group-item"><strong>Categoria:</strong> ${boardgame.category} </li>
                     </ul>
 
-                    <button type="button" class="btn btn-dark mt-4">Atrás</button>
+                    <a href="./index.html" type="button" class="btn btn-dark mt-4">Atrás</a>
                     <a href="./edit-boardgame.html?id=${boardgame.id}" type="button" class="btn btn-dark mt-4">Editar</a>
                 </div>
         `;

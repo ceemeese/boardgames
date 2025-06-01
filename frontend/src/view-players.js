@@ -48,6 +48,12 @@ function drawDataUsers(users) {
 
         const tdActions = document.createElement('td');
 
+        const showButton = document.createElement('a');
+        showButton.href = `/user-detail.html?id=${user.id}`;
+        showButton.type = 'button';
+        showButton.className = 'btn btn-sm btn-outline-secondary me-2';
+        showButton.textContent = 'Ver';
+
         const editButton = document.createElement('a');
         editButton.href = `/edit-user.html?id=${user.id}`;
         editButton.type = 'button';
@@ -60,6 +66,7 @@ function drawDataUsers(users) {
         deleteButtonAction.className = 'btn btn-sm btn-outline-danger';
         deleteButtonAction.textContent = 'Eliminar';
 
+        tdActions.appendChild(showButton);
         tdActions.appendChild(editButton);
         tdActions.appendChild(deleteButtonAction);
 
