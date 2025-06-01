@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document. createElement("h1");
     const sectionHeader = document.getElementById('sectionBoardgames')
     
-    if(boardgameId != null) {
+    if(boardgameId) {
         getBoardgame(boardgameId);
-        header.innerHTML = "Modificar juego"
+        header.innerHTML = "Ver detalle de juego"
         sectionHeader.appendChild(header);
     } else {
-        header.innerHTML = "Añadir juego"
-    sectionHeader.appendChild(header);
+        console.log('No hay ID de juego');
+        
     }
 
     console.log('Hola script principal')
