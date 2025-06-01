@@ -87,10 +87,10 @@ app.put('/users/:id', async (req, res) => {
 
     await db('users').update({
         name: req.body.name,
-        surname: req.body.description,
-        email: req.body.minPlayers,
-        alias: req.body.maxPlayers,
-        password: req.body.category
+        surname: req.body.surname,
+        email: req.body.email,
+        alias: req.body.alias,
+        password: req.body.password,
     }).where({id: req.params.id})
     res.status(204).json({});
 });
@@ -104,9 +104,13 @@ app.delete('/users/:id', async (req, res) => {
 
 
 //GAME
-app.get('/games', async (req, res) => {
-    const data = await db('games').select('*');
-    res.json(data);
+app.get('/game-info/:id/players', async (req, res) => {
+    const players = await db('gamesUsers')
+        .join('users', 'gamesUsers.userId', 'users.id')
+        .select('users.id', 'users.alias')
+        .where('gamesUsers.gameId',req.params.id)
+
+    res.json(players);
 });
 
 
@@ -125,6 +129,24 @@ app.get('/game-info', async (req, res) => {
     res.json(data);
 });
 
+
+app.get('/game-info/:id', async (req, res) => {
+    const data = await db('games')
+        .join('boardgames', 'games.boardgameId', 'boardgames.id')
+        .leftJoin('gamesUsers', 'games.id', 'gamesUsers.gameId')
+        .select(
+            'games.id',
+            'games.name',
+            'games.boardgameId',
+            'boardgames.name as boardgameName'
+        )
+        .count('gamesUsers.userId as numPlayers')
+        .where('games.id', req.params.id)
+        .groupBy('games.id', 'boardgames.name')
+        .first();
+    res.json(data);
+});
+
 app.get('/games/:id', async (req, res) => {
     const data = await db('games').select('*').where({id : req.params.id}).first();
     res.json(data);
@@ -132,16 +154,16 @@ app.get('/games/:id', async (req, res) => {
 
 app.post('/games', async (req, res) => {
 
-    await db('games').insert({
+    const data = await db('games').insert({
         name: req.body.name,
         boardgameId: req.body.boardgameId
     });
-    res.status(201).json({});
+    res.status(201).json(data);
 });
 
 app.put('/games/:id', async (req, res) => {
 
-    await db('games').update({
+    data = await db('games').update({
         name: req.body.name,
         boardgameId: req.body.boardgameId,
     }).where({id: req.params.id})
@@ -149,6 +171,7 @@ app.put('/games/:id', async (req, res) => {
 });
 
 app.delete('/games/:id', async (req, res) => {
+    await db('gamesUsers').delete().where({gameId : req.params.id});
     await db('games').delete().where({id : req.params.id});
     res.status(204).json({});
 });
@@ -166,16 +189,17 @@ app.get('/games-details/:id', async (req, res) => {
     res.json(data);
 });
 
-app.post('/games/:gameId/users', async (req, res) => {
+app.post('/games-details/:gameId/users', async (req, res) => {
 
-    await db('gamesUsers').insert({
+    const [newGameId] = await db('gamesUsers').insert({
         gameId: req.params.gameId,
         userId: req.body.userId
     });
-    res.status(201).json({});
+    res.status(201).json({id: newGameId});
 });
+
 //solo modificar usuario
-app.put('/games/:gameId/users/:userId', async (req, res) => {
+app.put('/games/-details/:gameId/users/:userId', async (req, res) => {
 
     await db('gamesUsers').update({
         userId: req.body.newUserId
@@ -183,8 +207,9 @@ app.put('/games/:gameId/users/:userId', async (req, res) => {
     res.status(204).json({});
 });
 
-app.delete('/games-details/:id', async (req, res) => {
-    await db('gamesUsers').delete().where({id : req.params.id});
+
+app.delete('/games-details/:gameId/users', async (req, res) => {
+    await db('gamesUsers').delete().where({gameId : req.params.gameId});
     res.status(204).json({});
 });
 
