@@ -61,6 +61,12 @@ function drawDataGames(games) {
 
         const tdActions = document.createElement('td');
 
+        const showButtonGame = document.createElement('a');
+        showButtonGame.href = `/game-detail.html?id=${game.id}`;
+        showButtonGame.type = 'button';
+        showButtonGame.className = 'btn btn-sm btn-outline-secondary me-2';
+        showButtonGame.textContent = 'Ver';
+
         const editButtonGame = document.createElement('a');
         editButtonGame.href = `/edit-game.html?id=${game.id}`;
         editButtonGame.type = 'button';
@@ -73,6 +79,7 @@ function drawDataGames(games) {
         deleteButtonAction.className = 'btn btn-sm btn-outline-danger';
         deleteButtonAction.textContent = 'Eliminar';
 
+        tdActions.appendChild(showButtonGame);
         tdActions.appendChild(editButtonGame);
         tdActions.appendChild(deleteButtonAction);
 

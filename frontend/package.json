@@ -9,7 +9,8 @@
         "src/edit-user.html",
         "src/view-games.html",
         "src/view-players.html",
-        "src/user-detail.html"],
+        "src/user-detail.html",
+        "src/game-detail.html"],
     "type": "module",
     "scripts": {
         "start": "parcel --no-cache",

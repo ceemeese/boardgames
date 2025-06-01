@@ -113,7 +113,7 @@ app.get('/game-info/:id/players', async (req, res) => {
     res.json(players);
 });
 
-
+//DEVOLVER INFORMACION MAS COMPLETA CON GAMEUSERS
 app.get('/game-info', async (req, res) => {
     const data = await db('games')
         .join('boardgames', 'games.boardgameId', 'boardgames.id')
@@ -129,7 +129,7 @@ app.get('/game-info', async (req, res) => {
     res.json(data);
 });
 
-
+//DEVOLVER INFORMACION MAS COMPLETA CON GAMEUSERS DE PARTIDA ESPECIFICA
 app.get('/game-info/:id', async (req, res) => {
     const data = await db('games')
         .join('boardgames', 'games.boardgameId', 'boardgames.id')
@@ -178,7 +178,7 @@ app.delete('/games/:id', async (req, res) => {
 
 
 
-//GAME USERS
+//TABLA GAME USERS
 app.get('/games-details', async (req, res) => {
     const data = await db('gamesUsers').select('*');
     res.json(data);
@@ -187,6 +187,16 @@ app.get('/games-details', async (req, res) => {
 app.get('/games-details/:id', async (req, res) => {
     const data = await db('gamesUsers').select('*').where({id : req.params.id}).first();
     res.json(data);
+});
+
+//DEVOLVER USUARIOS DE PARTIDA ESPECIFICA
+app.get('/games-details/:gameId/users', async (req, res) => {
+
+    const data = await db('gamesUsers')
+        .join('users', 'gamesUsers.userId', 'users.id')
+        .select('users.id', 'users.name')
+        .where('gamesUsers.gameId', req.params.gameId);
+    res.status(201).json(data);
 });
 
 app.post('/games-details/:gameId/users', async (req, res) => {
