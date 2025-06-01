@@ -44,22 +44,44 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        postGame( {
-            name: inputsForm.name, 
-            boardgameId: inputsForm.boardgameId
-        })
-        .then (newGame => {
-            console.log('Nueva partida creada:', newGame);
-            return postGameUsers(inputsForm.players, newGame);
-        })
-        .then ( () => {
-            notifyOK('Partida y jugadores registrados correctamente');
-            form.reset()
-        })
-        .catch (error => {
-            notifyKO('Error al registrar partida o jugadores')
-            console.log(error); 
-        })
+        if (gameId != null) {
+            updateGame( {
+                name: inputsForm.name,
+                boardgameId: inputsForm.boardgameId
+            })
+            .then ( () => {
+                console.log(`Partida guardada con nombre y juego, se procede a eliminar jugadores de ${gameId}`);
+                return deleteGameUsers(gameId);
+            })
+            .then ( () => {
+                console.log('Usuarios de partida eliminados');
+                return postGameUsers(inputsForm.players, gameId)
+            })
+            .then ( () => {
+                notifyOK('Partida y jugadores modificados correctamente');
+            })
+            .catch(error => {
+                notifyKO('Error al modificar partida o jugadores');
+                console.log(error);
+            })
+        } else {
+            postGame( {
+                name: inputsForm.name, 
+                boardgameId: inputsForm.boardgameId
+            })
+            .then (newGame => {
+                console.log('Nueva partida creada:', newGame);
+                return postGameUsers(inputsForm.players, newGame);
+            })
+            .then ( () => {
+                notifyOK('Partida y jugadores registrados correctamente');
+                form.reset();
+            })
+            .catch (error => {
+                notifyKO('Error al registrar partida o jugadores');
+                console.log(error); 
+            })  
+        }  
     })
 
 
@@ -191,7 +213,22 @@ function postGame(datos) {
             return data;
         })
         .catch((error) => {
-            console.log('Error saving game', error);
+            console.log('Error al registrar partida', error);
+            throw error;
+        })
+}
+
+
+function updateGame(datos) {
+    console.log('Datos enviados al backend:', datos);
+    return axios.put(`http://localhost:8080/games/${gameId}`, datos)
+        .then((response) => {
+            const data = response.data;
+            console.log('Partida modificada con éxito', data);
+            return data;
+        })
+        .catch ((error) => {
+            console.log(`Error al modificar partida ${gameId}`);
             throw error;
         })
 }
@@ -209,6 +246,37 @@ function postGameUsers(players, gameId) {
         })
         .catch ((error) => {
             console.log('Error saving relation game-users', error);
+            throw error;
+        });
+    });
+    
+    return Promise.all(promises);
+}
+
+
+function deleteGameUsers(gameId) {
+    return axios.delete(`http://localhost:8080/games-details/${gameId}/users`)
+        .then((response) => {
+            console.log('Jugadores eliminados correctamente');
+            return gameId;
+        })
+        .catch((error) => {
+            console.log('Error al eliminar los jugadores de la partida', error);
+            throw error;
+        })
+}
+
+
+function updateGameUsers(players, gameId) {
+    const promises = players.map(userId => {
+        return axios.put(`http://localhost:8080/games-details/${gameId}/users`, {userId})
+        .then((response) => {
+            const data = response.data;
+            console.log(`Jugador ${userId} modificado con éxito`, data);
+            return data;
+        })
+        .catch ((error) => {
+            console.log('Error al modificar relación partidas-jugadores', error);
             throw error;
         });
     });

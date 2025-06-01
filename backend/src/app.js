@@ -163,7 +163,7 @@ app.post('/games', async (req, res) => {
 
 app.put('/games/:id', async (req, res) => {
 
-    await db('games').update({
+    data = await db('games').update({
         name: req.body.name,
         boardgameId: req.body.boardgameId,
     }).where({id: req.params.id})
@@ -197,8 +197,9 @@ app.post('/games-details/:gameId/users', async (req, res) => {
     });
     res.status(201).json({id: newGameId});
 });
+
 //solo modificar usuario
-app.put('/games/:gameId/users/:userId', async (req, res) => {
+app.put('/games/-details/:gameId/users/:userId', async (req, res) => {
 
     await db('gamesUsers').update({
         userId: req.body.newUserId
@@ -206,8 +207,9 @@ app.put('/games/:gameId/users/:userId', async (req, res) => {
     res.status(204).json({});
 });
 
-app.delete('/games-details/:id', async (req, res) => {
-    await db('gamesUsers').delete().where({id : req.params.id});
+
+app.delete('/games-details/:gameId/users', async (req, res) => {
+    await db('gamesUsers').delete().where({gameId : req.params.gameId});
     res.status(204).json({});
 });
 
