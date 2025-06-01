@@ -1,12 +1,21 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
 
+let boardgamesList = [];
+let currentMinPlayers = 1;
+let currentMaxPlayers = Infinity;
+
 const urlParams = new URLSearchParams(window.location.search);
 const gameId = urlParams.get('id');
 console.log(gameId);
 
+document.querySelector('#boardgames').addEventListener('change', (e) => {
+    setPlayersLimits(e.target.value);
+});
+
 
 document.addEventListener('DOMContentLoaded', function() {
+    
     getListBoardgames();
     getListUsers();
     const header = document. createElement("h1");
@@ -75,8 +84,13 @@ function getGame(gameId) {
 function getListBoardgames(selectedBoardgameId = null) {
     axios.get('http://localhost:8080/boardgames')
         .then((response) => {
+            boardgamesList = response.data;
             showBoardGamesList(response.data, selectedBoardgameId);
             console.log(response.data);
+
+            if(selectedBoardgameId) {
+                setPlayersLimits(selectedBoardgameId);
+            }
         })
         .catch((error) => {
             console.error('Error fetching boardgames:', error);
@@ -155,7 +169,7 @@ function showBoardGamesList(boardgames, selectedBoardgameId = null) {
         optionBoardgames.textContent = boardgame.name;
 
         if (selectedBoardgameId && boardgame.id == selectedBoardgameId) {
-            option.selected = true;
+            optionBoardgames.selected = true;
         }
 
         selectBoardgame.appendChild(optionBoardgames);
@@ -163,6 +177,9 @@ function showBoardGamesList(boardgames, selectedBoardgameId = null) {
     });
 
 }
+
+
+
 
 //REGISTRAR PARTIDA
 function postGame(datos) {
@@ -212,8 +229,8 @@ function drawGameData(game) {
     markSelectedGame(game.boardgameId);
     getListUsersFromGame(game);;
 
-    
-    
+    setPlayersLimits(game.boardgameId);
+
     console.log('Datos de partida cargados:', game);
 }
 
@@ -252,6 +269,16 @@ function markSelectedPlayers(playersFromGame) {
 }
 
 
+//ESTABLECER MINIMO MAXIMO JUGADORES TRAS ESCUCHAR CAMBIOS EN JUEGO SELECCIONADO
+function setPlayersLimits(boardgameId) {
+    const game = boardgamesList.find( bg => bg.id == boardgameId)
+
+    if (game) {
+        currentMinPlayers = game.minPlayers;
+        currentMaxPlayers = game.maxPlayers;
+        console.log('Límites de jugadores establecidos para juego ', game.name);
+    }
+}
 
 
 
@@ -266,7 +293,7 @@ function getFormData() {
     };
 }
 
-//VALIDACION DE FORMULARIO
+//VALIDACIONES DE FORMULARIO
 function validationForm(game) {
     if (!game.name || game.name.trim() === '') {
         notifyKO('El nombre no puede estar vacío')
@@ -276,6 +303,16 @@ function validationForm(game) {
     if (!game.boardgameId || game.boardgameId.trim() === '') {
         console.log(game.boardgameId);
         notifyKO('Debe tener un juego asociado')
+        return false;
+    }
+
+    if (game.players.length < currentMinPlayers) {
+        notifyKO(`Debe seleccionar al menos ${currentMinPlayers} jugadores`);
+        return false;
+    }
+
+    if (game.players.length > currentMaxPlayers) {
+        notifyKO(`No puede seleccionar más de ${currentMaxPlayers} jugadores`);
         return false;
     }
 
