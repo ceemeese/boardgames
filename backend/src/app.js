@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-const knex= require('knex');
+
 
 const boardgames = require ('./route/boardgames');
 const games = require ('./route/games');
@@ -17,16 +17,6 @@ app.use('/', games)
 app.use('/', users)
 app.use('/', gamesUsers)
 
-
-
-//conexión con la db
-const db = knex({
-    client: 'sqlite3',
-    connection: {
-        filename: 'boardgames.db'
-    },
-    useNullAsDefault: true
-})
 
 
 //BOARDGAMES OK INDEX
