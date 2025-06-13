@@ -2,9 +2,22 @@ const express = require('express');
 const cors = require('cors')
 const knex= require('knex');
 
+const boardgames = require ('./route/boardgames');
+const games = require ('./route/games');
+const users = require ('./route/users');
+const gamesUsers = require ('./route/gamesUsers');
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use('/', boardgames)
+app.use('/', games)
+app.use('/', users)
+app.use('/', gamesUsers)
+
+
 
 //conexión con la db
 const db = knex({

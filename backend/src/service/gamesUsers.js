@@ -1,18 +1,18 @@
-const findUsersByGame = (async(req, res) => {
+const findUsersByGame = (async(id) => {
 
 })
 
-const postUserByGame = (async(req, res) => {
+const registerUserByGame = (async(id, userId) => {
     
 })
 
-const deleteUserByGame = (async(req, res) => {
+const removeUserByGame = (async(id) => {
     
 })
 
 
 module.exports = {
     findUsersByGame,
-    postUserByGame,
-    deleteUserByGame
+    registerUserByGame,
+    removeUserByGame
 }

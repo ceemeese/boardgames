@@ -1,20 +1,20 @@
-const findBoardgames = (async (req, res) => {
+const findBoardgames = (async () => {
 
 })
 
-const findBoardgame = (async (req, res) => {
+const findBoardgame = (async (id) => {
     
 })
 
-const registerBoardgame = (async (req, res) => {
+const registerBoardgame = (async (name, description, minPlayers, maxPlayers, category) => {
     
 })
 
-const modifyBoardgame = (async (req, res) => {
+const modifyBoardgame = (async (id, name, description, minPlayers, maxPlayers, category) => {
     
 })
 
-const removeBoardgame = (async (req, res) => {
+const removeBoardgame = (async (id) => {
     
 })
 

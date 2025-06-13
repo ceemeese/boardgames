@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
 
-currentMaxPlayers = 0;
+let boardgamesList = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     getListBoardgames();

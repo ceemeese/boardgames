@@ -1,20 +1,20 @@
-const findUsers = (async (req, res) => {
+const findUsers = (async () => {
 
 })
 
-const findUser = (async (req, res) => {
+const findUser = (async (id) => {
     
 })
 
-const registerUser = (async (req, res) => {
+const registerUser = (async (name, surname, email, alias, password) => {
     
 })
 
-const modifyUser = (async (req, res) => {
+const modifyUser = (async (id, name, surname, email, alias, password) => {
     
 })
 
-const removeUser = (async (req, res) => {
+const removeUser = (async (id) => {
     
 })
 

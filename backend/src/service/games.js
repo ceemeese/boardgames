@@ -1,20 +1,20 @@
-const findGames = (async (req, res) => {
+const findGames = (async () => {
 
 })
 
-const findGame = (async (req, res) => {
+const findGame = (async (id) => {
     
 })
 
-const registerGame = (async (req, res) => {
+const registerGame = (async (name, boardgameId) => {
     
 })
 
-const modifyGame = (async (req, res) => {
+const modifyGame = (async (id, name, boardgameId) => {
     
 })
 
-const removeGame = (async (req, res) => {
+const removeGame = (async (id) => {
     
 })
 
