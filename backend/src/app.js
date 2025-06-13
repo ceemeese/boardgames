@@ -21,45 +21,33 @@ app.use('/', gamesUsers)
 
 //USERS OK VIEW PLAYERS
 app.get('/users', async (req, res) => {
-    const data = await db('users').select('*');
+    const data = 
     res.json(data);
 });
 
 //USER ID OK EDIT USER / USER DETAIL
 app.get('/users/:id', async (req, res) => {
-    const data = await db('users').select('*').where({id : req.params.id}).first();
+    const data = 
     res.json(data);
 });
 
 //USER POST OK EDIT USER
 app.post('/users', async (req, res) => {
 
-    await db('users').insert({
-        name: req.body.name,
-        surname: req.body.surname,
-        email: req.body.email,
-        alias: req.body.alias,
-        password: req.body.password,
-    });
+    
     res.status(201).json({});
 });
 
 //USER PUT OK EDIT USER
 app.put('/users/:id', async (req, res) => {
 
-    await db('users').update({
-        name: req.body.name,
-        surname: req.body.surname,
-        email: req.body.email,
-        alias: req.body.alias,
-        password: req.body.password,
-    }).where({id: req.params.id})
+    
     res.status(204).json({});
 });
 
 //USER DELETE OK VIEW PLAYERS
 app.delete('/users/:id', async (req, res) => {
-    await db('users').delete().where({id : req.params.id});
+    
     res.status(204).json({});
 });
 
