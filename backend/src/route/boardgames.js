@@ -1,11 +1,12 @@
 const express = require('express');
+const { getBoardgames, postBoardgame, putBoardgame, deleteBoardgame, getBoardgame } = require('../controller/boardgames');
 const router = express.Router();
 
-router.get('/boardgames');
-router.get('/boardgames/:id');
-router.post('/boardgames');
-router.put('boardgames/:id)');
-router.delete('/boardgames/:id')
+router.get('/boardgames', getBoardgames);
+router.get('/boardgames/:id', getBoardgame);
+router.post('/boardgames', postBoardgame);
+router.put('boardgames/:id)', putBoardgame);
+router.delete('/boardgames/:id', deleteBoardgame)
 
 
 module.exports = router;
