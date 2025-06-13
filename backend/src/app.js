@@ -19,54 +19,6 @@ app.use('/', gamesUsers)
 
 
 
-//BOARDGAMES OK INDEX
-app.get('/boardgames', async (req, res) => {
-    const data = await db('boardgames').select('*');
-    res.json(data);
-});
-
-//BOARDGAMES ID OK EDIT-BOARDGAME / BOARDGAME DETAIL
-app.get('/boardgames/:id', async (req, res) => {
-    const data = await db('boardgames').select('*').where({id : req.params.id}).first();
-    res.json(data);
-});
-  
-//BOARDGAMES POST OK EDIT-BOARDGAME
-app.post('/boardgames', async (req, res) => {
-
-    await db('boardgames').insert({
-        name: req.body.name,
-        description: req.body.description,
-        minPlayers: req.body.minPlayers,
-        maxPlayers: req.body.maxPlayers,
-        category: req.body.category
-    });
-    res.status(201).json({});
-});
-
-//BOARDGAMES PUT OK EDIT-BOARDGAME
-app.put('/boardgames/:id', async (req, res) => {
-
-    await db('boardgames').update({
-        name: req.body.name,
-        description: req.body.description,
-        minPlayers: req.body.minPlayers,
-        maxPlayers: req.body.maxPlayers,
-        category: req.body.category
-    }).where({id: req.params.id})
-    res.status(204).json({});
-});
-
-//BOARDGAMES DELETE OK INDEX
-app.delete('/boardgames/:id', async (req, res) => {
-    await db('boardgames').delete().where({id : req.params.id});
-    res.status(204).json({});
-});
-
-
-
-
-
 //USERS OK VIEW PLAYERS
 app.get('/users', async (req, res) => {
     const data = await db('users').select('*');
