@@ -101,12 +101,12 @@ const postGame = (async (req, res) => {
                 })
             }
 
-        await registerGame(
+        const id = await registerGame(
             req.body.name, 
             req.body.boardgameId
         );
 
-        res.status(201).json({});
+        res.status(201).json(id);
     } catch (error) {
         res.status(500).json({
             message: 'Error interno del servidor'

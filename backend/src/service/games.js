@@ -43,10 +43,12 @@ const findGameBasic = (async (id) => {
 })
 
 const registerGame = (async (name, boardgameId) => {
-    await db('games').insert({
+    const [newGameId] = await db('games').insert({
         name: name,
         boardgameId: boardgameId
     });
+
+    return {id: newGameId }
 })
 
 const modifyGame = (async (id, name, boardgameId) => {

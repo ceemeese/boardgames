@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 boardgameId: inputsForm.boardgameId
             })
             .then (newGame => {
-                console.log('Nueva partida creada:', newGame);
-                return postGameUsers(inputsForm.players, newGame);
+                console.log('Nueva partida creada:', newGame.id);
+                return postGameUsers(inputsForm.players, newGame.id);
             })
             .then ( () => {
                 notifyOK('Partida y jugadores registrados correctamente');
