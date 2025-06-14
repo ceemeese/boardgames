@@ -18,42 +18,6 @@ app.use('/', users)
 app.use('/', gamesUsers)
 
 
-
-//USERS OK VIEW PLAYERS
-app.get('/users', async (req, res) => {
-    const data = 
-    res.json(data);
-});
-
-//USER ID OK EDIT USER / USER DETAIL
-app.get('/users/:id', async (req, res) => {
-    const data = 
-    res.json(data);
-});
-
-//USER POST OK EDIT USER
-app.post('/users', async (req, res) => {
-
-    
-    res.status(201).json({});
-});
-
-//USER PUT OK EDIT USER
-app.put('/users/:id', async (req, res) => {
-
-    
-    res.status(204).json({});
-});
-
-//USER DELETE OK VIEW PLAYERS
-app.delete('/users/:id', async (req, res) => {
-    
-    res.status(204).json({});
-});
-
-
-
-
 //TABLA GAME CON GAMEUSERS DEVOLVER USUARIOS OK GAME DETAIL
 app.get('/game-info/:id/players', async (req, res) => {
     const players = await db('gamesUsers')
@@ -66,35 +30,13 @@ app.get('/game-info/:id/players', async (req, res) => {
 
 //DEVOLVER INFORMACION TABLA GAME MAS COMPLETA CON GAMEUSERS OK VIEWGAMES
 app.get('/game-info', async (req, res) => {
-    const data = await db('games')
-        .join('boardgames', 'games.boardgameId', 'boardgames.id')
-        .leftJoin('gamesUsers', 'games.id', 'gamesUsers.gameId')
-        .select(
-            'games.id',
-            'games.name',
-            'games.boardgameId',
-            'boardgames.name as boardgameName'
-        )
-        .count('gamesUsers.userId as numPlayers')
-        .groupBy('games.id', 'boardgames.name')
+    
     res.json(data);
 });
 
 //DEVOLVER INFORMACION MAS COMPLETA CON GAMEUSERS DE PARTIDA ESPECIFICA OK GAME DETAIL Y EDIT GAME
 app.get('/game-info/:id', async (req, res) => {
-    const data = await db('games')
-        .join('boardgames', 'games.boardgameId', 'boardgames.id')
-        .leftJoin('gamesUsers', 'games.id', 'gamesUsers.gameId')
-        .select(
-            'games.id',
-            'games.name',
-            'games.boardgameId',
-            'boardgames.name as boardgameName'
-        )
-        .count('gamesUsers.userId as numPlayers')
-        .where('games.id', req.params.id)
-        .groupBy('games.id', 'boardgames.name')
-        .first();
+    
     res.json(data);
 });
 
@@ -102,27 +44,20 @@ app.get('/game-info/:id', async (req, res) => {
 //GAMES POST OK EDIT GAME
 app.post('/games', async (req, res) => {
 
-    const data = await db('games').insert({
-        name: req.body.name,
-        boardgameId: req.body.boardgameId
-    });
+    
     res.status(201).json(data);
 });
 
 //GAMES PUT OK EDIT GAME
 app.put('/games/:id', async (req, res) => {
 
-    data = await db('games').update({
-        name: req.body.name,
-        boardgameId: req.body.boardgameId,
-    }).where({id: req.params.id})
+    
     res.status(204).json({});
 });
 
 //GAMES DELETE OK VIEW GAMES
 app.delete('/games/:id', async (req, res) => {
-    await db('gamesUsers').delete().where({gameId : req.params.id});
-    await db('games').delete().where({id : req.params.id});
+  
     res.status(204).json({});
 });
 
