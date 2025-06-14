@@ -1,6 +1,6 @@
 {
     "name": "boardgames-frontend",
-    "version": "0.1",
+    "version": "0.1.0",
     "source": [
         "src/index.html",
         "src/boardgame-detail.html",
@@ -10,7 +10,8 @@
         "src/view-games.html",
         "src/view-players.html",
         "src/user-detail.html",
-        "src/game-detail.html"],
+        "src/game-detail.html"
+    ],
     "type": "module",
     "scripts": {
         "start": "parcel --no-cache",
