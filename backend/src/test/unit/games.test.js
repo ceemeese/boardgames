@@ -21,7 +21,7 @@ describe('games controller', () => {
     })
 
 
-    it('getGamePlayers debería devolver listado de id/jugadores de partida concreta con código 200', async () => {
+    it('getGamePlayers debería devolver listado de id/alias jugadores de partida concreta con código 200', async () => {
         const usersFake = [{ id: 1, name: 'Cris' }, { id: 2, name: 'Alba' }];
 
         req.params = { id: 1 };
