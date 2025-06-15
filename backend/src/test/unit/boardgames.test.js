@@ -1,0 +1,123 @@
+//const expect = require('chai').expect;
+const { getBoardgames, getBoardgame, postBoardgame, putBoardgame, deleteBoardgame } = require('../../controller/boardgames');
+const { findBoardgames, findBoardgame, registerBoardgame, modifyBoardgame, removeBoardgame } = require('../../service/boardgames');
+const { validationResult } = require('express-validator');
+
+jest.mock('../../service/boardgames');
+jest.mock('express-validator');
+
+describe('boardgames controller', () => {
+
+    let req;
+    let res;
+
+    beforeEach( () => {
+        req = {}
+        res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        }
+        jest.clearAllMocks();
+    })
+
+
+    it('getBoardgames debería devolver listado con código 200', async () => {
+        const boardgamesFake = [{ id: 1, name: 'Catan' }, { id: 2, name: 'Carcassone' }];
+        findBoardgames.mockResolvedValue(boardgamesFake);
+
+        await getBoardgames(req, res);
+
+        expect(findBoardgames).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(boardgamesFake);
+    });
+
+
+
+    it('getBoardgame debería devolver un elemento con código 200', async () => {
+        const boardgameFake = { id: 1, name: 'Catan' };
+        findBoardgame.mockResolvedValue(boardgameFake);
+
+        req.params = { id: 1 };
+
+        await getBoardgame(req, res);
+
+        expect(findBoardgame).toHaveBeenCalledWith(1);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(boardgameFake);
+    });
+
+
+    it('postBoardgame debería devolver respuesta vacía con código 201', async () => {
+        
+        req.body = {
+            name: 'Catan',
+            description: 'Juego de estrategia',
+            minPlayers: 1,
+            maxPlayers: 4,
+            category: 'Estrategia'
+        };
+        validationResult.mockReturnValue({ isEmpty: () => true });
+        registerBoardgame.mockResolvedValue();
+
+        await postBoardgame(req, res);
+
+        expect(validationResult).toHaveBeenCalledWith(req);
+        expect(registerBoardgame).toHaveBeenCalledWith(
+            'Catan',
+            'Juego de estrategia',
+            1,
+            4,
+            'Estrategia'
+        );
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.json).toHaveBeenCalledWith({});
+    });
+
+
+
+    it('putBoardgame debería devolver respuesta vacía con código 204', async () => {
+        req.params = {id : 1}
+        req.body = {
+            name: 'Catan actu',
+            description: 'Juego de estrategia',
+            minPlayers: 1,
+            maxPlayers: 4,
+            category: 'Estrategia'
+        };
+
+        validationResult.mockReturnValue({ isEmpty: () => true });
+        modifyBoardgame.mockResolvedValue();
+
+        await putBoardgame(req, res);
+
+        expect(validationResult).toHaveBeenCalledWith(req);
+        expect(modifyBoardgame).toHaveBeenCalledWith(
+            1,
+            'Catan actu',
+            'Juego de estrategia',
+            1,
+            4,
+            'Estrategia'
+        );
+        expect(res.status).toHaveBeenCalledWith(204);
+        expect(res.json).toHaveBeenCalledWith({});
+    });
+
+
+        it('deleteBoardgame debería devolver respuesta vacía con código 204', async () => {
+        req.params = {id : 1}
+
+        validationResult.mockReturnValue({ isEmpty: () => true });
+        removeBoardgame.mockResolvedValue();
+
+        await deleteBoardgame(req, res);
+
+        expect(validationResult).toHaveBeenCalledWith(req);
+        expect(removeBoardgame).toHaveBeenCalledWith(1);
+        expect(res.status).toHaveBeenCalledWith(204);
+        expect(res.json).toHaveBeenCalledWith({});
+    });
+
+
+})
