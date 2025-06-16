@@ -10,13 +10,15 @@ const findUser = (async (id) => {
 })
 
 const registerUser = (async (name, surname, email, alias, password) => {
-    await db('users').insert({
+    const [id] = await db('users').insert({
         name: name,
         surname: surname,
         email: email,
         alias: alias,
         password: password,
     });
+
+    return id;
 })
 
 const modifyUser = (async (id, name, surname, email, alias, password) => {
@@ -30,7 +32,9 @@ const modifyUser = (async (id, name, surname, email, alias, password) => {
 })
 
 const removeUser = (async (id) => {
-    await db('users').delete().where({id : id});
+    const row = await db('users').delete().where({id : id});
+
+    return row;
 })
 
 const findUserByAlias = (async (alias) => {

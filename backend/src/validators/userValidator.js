@@ -5,7 +5,7 @@ const userValidation = [
 
     body('email')
         .notEmpty()
-        .withMessage('El correo es onligatorio'),
+        .withMessage('El correo es obligatorio'),
     body('alias')
         .notEmpty()
         .withMessage('El alias es obligatorio'),

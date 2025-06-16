@@ -47,7 +47,7 @@ const postUser = (async (req, res) => {
             })
         }
 
-        await registerUser(
+        const idResult = await registerUser(
             req.body.name, 
             req.body.surname, 
             req.body.email, 
@@ -55,7 +55,14 @@ const postUser = (async (req, res) => {
             req.body.password
         );
 
-        res.status(201).json({});
+        res.status(201).json({
+            id: idResult,
+            name: req.body.name,
+            surname: req.body.surname,
+            email: req.body.email,
+            alias: req.body.alias,
+            password: req.body.password 
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -103,7 +110,15 @@ const deleteUser = (async (req, res) => {
             })
         }
 
-        await removeUser(req.params.id);
+        const result = await removeUser(req.params.id);
+
+        if(result === 0) {
+            res.status(404).json({
+                status: 'No encontrado',
+                message: 'Usuario no encontrado'
+            })
+            return;
+        }
 
         res.status(204).json({});
     } catch (error) {

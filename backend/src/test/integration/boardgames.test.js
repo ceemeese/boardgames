@@ -13,7 +13,7 @@ describe('boardgames', () => {
     describe('POST /boardgames', () => {
         it('Registrar nueva juego y código 201', (done) => {
             const boardgame = {
-                name: 'boardgameNameTest21',
+                name: `boardgameName_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
                 description: 'boardgame description',
                 minPlayers: 1,
                 maxPlayers: 3,
@@ -31,7 +31,12 @@ describe('boardgames', () => {
                     expect(response.body).to.have.property('minPlayers');
                     expect(response.body).to.have.property('maxPlayers');
                     expect(response.body).to.have.property('category');
-                    done();
+
+                    const newId = response.body.id;
+
+                    chai.request(app)
+                        .delete(`/boardgames/${newId}`)
+                        .end(() => done());
                 });
         });
 
@@ -65,14 +70,14 @@ describe('boardgames', () => {
     describe('PUT /boardgames', () => {
         it('Modificar nuevo juego y código 204', (done) => {
             const boardgame = {
-                name: 'boardgameNamePut',
+                name: `boardgameName_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
                 description: 'boardgame description',
                 minPlayers: 1,
                 maxPlayers: 3,
                 category: 'Rol'
             };
 
-            const id = 41;
+            const id = 38;
             chai.request(app)
                 .put(`/boardgames/${id}`)
                 .send(boardgame)
@@ -91,7 +96,7 @@ describe('boardgames', () => {
                 category: 'Rol'
             };
 
-            const id = 41;
+            const id = 38;
             chai.request(app)
                 .put(`/boardgames/${id}`)
                 .send(boardgame)
