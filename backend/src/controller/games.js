@@ -152,7 +152,15 @@ const deleteGame = (async (req, res) => {
                 })
             }
 
-        await removeGame(req.params.id);
+        const result = await removeGame(req.params.id);
+
+        if(result === 0) {
+            res.status(404).json({
+                status: 'No encontrado',
+                message: 'Game no encontrado'
+            })
+            return;
+        }
 
         res.status(204).json({});
     } catch (error) {
