@@ -10,13 +10,15 @@ const findBoardgame = (async (id) => {
 })
 
 const registerBoardgame = (async (name, description, minPlayers, maxPlayers, category) => {
-    await db('boardgames').insert({
+    const [id] = await db('boardgames').insert({
         name: name,
         description: description,
         minPlayers: minPlayers,
         maxPlayers: maxPlayers,
         category: category
     });
+
+    return id;
 })
 
 const modifyBoardgame = (async (id, name, description, minPlayers, maxPlayers, category) => {
@@ -30,7 +32,9 @@ const modifyBoardgame = (async (id, name, description, minPlayers, maxPlayers, c
 })
 
 const removeBoardgame = (async (id) => {
-    await db('boardgames').delete().where({id: id});
+    const row = await db('boardgames').delete().where({id: id});
+
+    return row;
 })
 
 

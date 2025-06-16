@@ -37,7 +37,7 @@ const postBoardgame = (async (req, res) => {
             })
         }
 
-        await registerBoardgame(
+        const idResult = await registerBoardgame(
             req.body.name, 
             req.body.description, 
             req.body.minPlayers, 
@@ -45,7 +45,14 @@ const postBoardgame = (async (req, res) => {
             req.body.category
         );
 
-        res.status(201).json({});
+        res.status(201).json({
+            id: idResult,
+            name: req.body.name, 
+            description: req.body.description, 
+            minPlayers: req.body.minPlayers, 
+            maxPlayers: req.body.maxPlayers, 
+            category: req.body.category
+        });
     } catch (error) {
         res.status(500).json({
             message: 'Error interno del servidor'
@@ -93,7 +100,15 @@ const deleteBoardgame = (async (req, res) => {
             })
         }
 
-        await removeBoardgame(req.params.id);
+        const result = await removeBoardgame(req.params.id);
+
+        if(result === 0) {
+            res.status(404).json({
+                status: 'No encontrado',
+                message: 'Boardgame no encontrado'
+            })
+            return;
+        }
 
         res.status(204).json({});
     } catch (error) {
