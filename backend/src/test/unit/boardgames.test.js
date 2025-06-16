@@ -48,8 +48,9 @@ describe('boardgames controller', () => {
     });
 
 
-    it('postBoardgame debería devolver respuesta vacía con código 201', async () => {
-        
+    it('postBoardgame debería devolver elemento completo con código 201', async () => {
+        const fakeId = 1;
+
         req.body = {
             name: 'Catan',
             description: 'Juego de estrategia',
@@ -58,7 +59,7 @@ describe('boardgames controller', () => {
             category: 'Estrategia'
         };
         validationResult.mockReturnValue({ isEmpty: () => true });
-        registerBoardgame.mockResolvedValue();
+        registerBoardgame.mockResolvedValue(fakeId);
 
         await postBoardgame(req, res);
 
@@ -71,7 +72,13 @@ describe('boardgames controller', () => {
             'Estrategia'
         );
         expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({});
+        expect(res.json).toHaveBeenCalledWith({
+            id: fakeId, 
+            name: req.body.name, 
+            description: req.body.description, 
+            minPlayers: req.body.minPlayers, 
+            maxPlayers: req.body.maxPlayers, 
+            category: req.body.category});
     });
 
 

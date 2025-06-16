@@ -18,7 +18,8 @@ const registerUserByGame = (async(gameId, userId) => {
 })
 
 const removeUserByGame = (async(gameId) => {
-     await db('gamesUsers').delete().where({gameId : gameId});
+     const row = await db('gamesUsers').delete().where({gameId : gameId});
+     return row;
 })
 
 

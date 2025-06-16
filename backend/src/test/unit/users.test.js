@@ -48,6 +48,7 @@ describe('users controller', () => {
 
 
     it('postUser debería devolver respuesta vacía con código 201', async () => {
+        const fakeId = 1;
         
         req.body = {
             name: 'Cris',
@@ -57,7 +58,7 @@ describe('users controller', () => {
             password: '1234'
         };
         validationResult.mockReturnValue({ isEmpty: () => true });
-        registerUser.mockResolvedValue();
+        registerUser.mockResolvedValue(fakeId);
 
         await postUser(req, res);
 
@@ -70,7 +71,14 @@ describe('users controller', () => {
             '1234'
         );
         expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({});
+        expect(res.json).toHaveBeenCalledWith({
+            id: fakeId,
+            name: req.body.name,
+            surname: req.body.surname,
+            email: req.body.email,
+            alias: req.body.alias,
+            password: req.body.password
+        });
     });
 
 

@@ -22,3 +22,6 @@ app.use('/', gamesUsers)
 app.listen(8080, () => {
     console.log("Backend iniciado correctamente por puerto 8080");
 });
+
+
+module.exports = app;

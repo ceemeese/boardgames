@@ -50,7 +50,14 @@ const deleteGameUsers = (async (req, res) => {
                 })
             }
         
-        await removeUserByGame(req.params.gameId);
+        const result = await removeUserByGame(req.params.gameId);
+
+        if(result === 0){
+            res.status(404).json({
+                status: 'No encontrado',
+                message: 'Relación partida-usuario no encontrada'
+            })
+        }
 
         res.status(204).json({});
     } catch (error) {

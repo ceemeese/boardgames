@@ -60,7 +60,9 @@ const modifyGame = (async (id, name, boardgameId) => {
 
 const removeGame = (async (id) => {
     await db('gamesUsers').delete().where({gameId : id});
-    await db('games').delete().where({id : id});
+    const row = await db('games').delete().where({id : id});
+
+    return row;
 })
 
 
