@@ -5,7 +5,7 @@
     "scripts": {
         "unit-test": "jest --verbose src/test/unit",
         "integration-test": "mocha src/test/integration --exit",
-        "test": "npm run unit-test && npm run integration-test",
+        "test": "npm run unit-test && npm run integration-test" ,
         "start": "node src/app.js"
     },
     "author": "Cristina Malmierca",
