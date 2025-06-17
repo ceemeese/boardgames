@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from './config';
 
 const urlParams = new URLSearchParams(window.location.search);
 const gameId = urlParams.get('id');
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function getGame(gameId) {
-    axios.get(`http://localhost:8080/game-info/${gameId}`)
+    axios.get(`${API_URL}/game-info/${gameId}`)
         .then((response) => {
             drawGameData(response.data);
             getPlayersFromGame(gameId);
@@ -23,7 +24,7 @@ function getGame(gameId) {
 
 
 function getPlayersFromGame(gameId) {
-    axios.get(`http://localhost:8080/games-details/${gameId}/users`)
+    axios.get(`${API_URL}/games-details/${gameId}/users`)
         .then((response) => {
             drawPlayersData(response.data);
         })

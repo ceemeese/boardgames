@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
+import { API_URL } from './config';
 
 document.addEventListener('DOMContentLoaded', function() {
     getListUsers();
@@ -12,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function getListUsers() {
-    axios.get('http://localhost:8080/users')
+    axios.get(`${API_URL}/users`)
         .then((response) => {
             drawDataUsers(response.data);
             console.log(response.data);
@@ -91,7 +92,7 @@ function drawDataUsers(users) {
 
 function deleteUser(userId) {
 
-    axios.delete(`http://localhost:8080/users/${userId}`)
+    axios.delete(`${API_URL}/users/${userId}`)
         .then((response) => {
             console.log('Jugador eliminado con éxito');
             notifyOK('Jugador eliminado correctamente');

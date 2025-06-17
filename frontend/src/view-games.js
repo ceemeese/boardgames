@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
+import { API_URL } from './config';
 
 let boardgamesList = [];
 
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function getListBoardgames(selectedBoardgameId = null) {
-    axios.get('http://localhost:8080/boardgames')
+    axios.get(`${API_URL}/boardgames`)
         .then((response) => {
             boardgamesList = response.data;
         })
@@ -24,7 +25,7 @@ function getListBoardgames(selectedBoardgameId = null) {
 
 
 function getListGames() {
-    axios.get('http://localhost:8080/game-info')
+    axios.get(`${API_URL}/game-info`)
         .then((response) => {
             drawDataGames(response.data);
             console.log(response.data);
@@ -101,7 +102,7 @@ function drawDataGames(games) {
 
 function deleteGame(gameId) {
 
-    axios.delete(`http://localhost:8080/games/${gameId}`)
+    axios.delete(`${API_URL}/games/${gameId}`)
         .then((response) => {
             console.log('Partida eliminada con éxito');
             notifyOK('Partida eliminada correctamente');

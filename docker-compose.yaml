@@ -1,0 +1,43 @@
+version: '3.8'
+name: boardgames
+networks: 
+  network1:
+    driver: bridge
+services:
+  db: 
+    image: mariadb:11.3.2
+    container_name: boardgame-db
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_PORT=3306
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backend/db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - network1
+  web:
+    build: ./frontend/
+    container_name: boardgame-web
+    ports: 
+      - "1234:1234"
+    networks:
+      - network1
+    environment:
+      - API_BASE_URL=http://api:8080
+  api:
+    build: ./backend/
+    container_name: boardgame-api
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - network1

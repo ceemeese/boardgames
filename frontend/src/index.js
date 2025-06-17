@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { API_URL } from './config';
+
 
 document.addEventListener('DOMContentLoaded', function() {
     getListBoardgames(); 
@@ -10,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function getListBoardgames() {
-    axios.get('http://localhost:8080/boardgames')
+    axios.get(`${API_URL}/boardgames`)
         .then((response) => {
             drawData(response.data);
         })
@@ -24,7 +26,7 @@ function getListBoardgames() {
 
 function deleteBoardgame(boardgameId) {
 
-    axios.delete(`http://localhost:8080/boardgames/${boardgameId}`)
+    axios.delete(`${API_URL}/boardgames/${boardgameId}`)
         .then((response) => {
             console.log('Juego eliminado con éxito');
             getListBoardgames();

@@ -7,6 +7,8 @@ const games = require ('./route/games');
 const users = require ('./route/users');
 const gamesUsers = require ('./route/gamesUsers');
 
+const { config } = require('../config/configuration');
+
 
 const app = express();
 app.use(cors());
@@ -19,8 +21,8 @@ app.use('/', gamesUsers)
 
 
 
-app.listen(8080, () => {
-    console.log("Backend iniciado correctamente por puerto 8080");
+app.listen(config.service.port , () => {
+    console.log(`Backend iniciado correctamente por puerto ${config.service.port}`);
 });
 
 

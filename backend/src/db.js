@@ -1,10 +1,15 @@
-const knex= require('knex');
+const knex = require('knex');
+const { config } = require('../config/configuration');
 
 //conexión con la db
 const db = knex({
-    client: 'sqlite3',
+    client: 'mysql',
     connection: {
-        filename: 'boardgames.db'
+        host: config.db.host,
+        port: config.db.port,
+        user: config.db.user,
+        password: config.db.password,
+        database: config.db.database
     },
     useNullAsDefault: true
 })
