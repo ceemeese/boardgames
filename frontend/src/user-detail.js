@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from './config';
 
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('id');
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function getUser(userId) {
-    axios.get(`http://localhost:8080/users/${userId}`)
+    axios.get(`${API_URL}/users/${userId}`)
         .then((response) => {
             drawUserData(response.data);
         })

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
 var validator = require("email-validator");
+import { API_URL } from './config';
 
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('id');
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function getUser(userId) {
-    axios.get(`http://localhost:8080/users/${userId}`)
+    axios.get(`${API_URL}/users/${userId}`)
         .then((response) => {
             console.log(response.data);
             drawUserData(response.data);
@@ -42,7 +43,7 @@ function getUser(userId) {
 
 function postUser(datos) {
     console.log('Datos enviados al backend:', datos);
-    axios.post('http://localhost:8080/users', datos)
+    axios.post(`${API_URL}/users`, datos)
         .then((response) => {
             const data = response.data;
             console.log('Usuario añadido con éxito:', data);
@@ -62,7 +63,7 @@ function postUser(datos) {
 
 function updateUser(datos) {
     console.log('Datos enviados al backend:', datos);
-    axios.put(`http://localhost:8080/users/${userId}`, datos)
+    axios.put(`${API_URL}/users/${userId}`, datos)
         .then((response) => {
             const data = response.data;
             console.log('Usuario modificado con éxito:', data);

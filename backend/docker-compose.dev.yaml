@@ -1,0 +1,15 @@
+version: '1'
+name: boardgames
+services:
+  db: 
+    image: mariadb:11.3.2
+    container_name: boardgame-db-dev
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_PORT=3306
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backend/db:/docker-entrypoint-initdb.d

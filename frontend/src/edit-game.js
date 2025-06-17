@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
+import { API_URL } from './config';
 
 let boardgamesList = [];
 let currentMinPlayers = 1;
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //OBTENER PARTIDA PARA MODIFICAR
 function getGame(gameId) {
-    axios.get(`http://localhost:8080/game-info/${gameId}`)
+    axios.get(`${API_URL}/game-info/${gameId}`)
         .then((response) => {
             console.log(response.data);
             drawGameData(response.data);
@@ -104,7 +105,7 @@ function getGame(gameId) {
 
 //OBTENER TODOS LOS JUEGOS
 function getListBoardgames(selectedBoardgameId = null) {
-    axios.get('http://localhost:8080/boardgames')
+    axios.get(`${API_URL}/boardgames`)
         .then((response) => {
             boardgamesList = response.data;
             showBoardGamesList(response.data, selectedBoardgameId);
@@ -122,7 +123,7 @@ function getListBoardgames(selectedBoardgameId = null) {
 
 //OBTENER TODOS LOS USUARIOS
 function getListUsers() {
-    axios.get('http://localhost:8080/users')
+    axios.get(`${API_URL}/users`)
         .then((response) => {
             showPlayersList(response.data);
             console.log(response.data);
@@ -135,7 +136,7 @@ function getListUsers() {
 
 //OBTENER USUARIOS DE PARTIDA ESPECIFICA
 function getListUsersFromGame(game) {
-        axios.get(`http://localhost:8080/game-info/${game.id}/players`)
+        axios.get(`${API_URL}/game-info/${game.id}/players`)
         .then((response) => {
             markSelectedPlayers(response.data);
             console.log(response.data);
@@ -206,7 +207,7 @@ function showBoardGamesList(boardgames, selectedBoardgameId = null) {
 //REGISTRAR PARTIDA
 function postGame(datos) {
     console.log('Datos enviados al backend:', datos);
-    return axios.post('http://localhost:8080/games', datos)
+    return axios.post(`${API_URL}/games`, datos)
         .then ((response) => {
             const data = response.data;
             console.log('Partida añadida con éxito', data);
@@ -221,7 +222,7 @@ function postGame(datos) {
 
 function updateGame(datos) {
     console.log('Datos enviados al backend:', datos);
-    return axios.put(`http://localhost:8080/games/${gameId}`, datos)
+    return axios.put(`${API_URL}/games/${gameId}`, datos)
         .then((response) => {
             const data = response.data;
             console.log('Partida modificada con éxito', data);
@@ -238,7 +239,7 @@ function postGameUsers(players, gameId) {
     console.log('Datos enviados al backend', {players, gameId});
 
     const promises = players.map(userId => {
-        return axios.post(`http://localhost:8080/games-details/${gameId}/users`, {userId})
+        return axios.post(`${API_URL}/games-details/${gameId}/users`, {userId})
         .then((response) => {
             const data = response.data;
             console.log(`Jugador ${userId} guardado con éxito`, data);
@@ -255,7 +256,7 @@ function postGameUsers(players, gameId) {
 
 
 function deleteGameUsers(gameId) {
-    return axios.delete(`http://localhost:8080/games-details/${gameId}/users`)
+    return axios.delete(`${API_URL}/games-details/${gameId}/users`)
         .then((response) => {
             console.log('Jugadores eliminados correctamente');
             return gameId;
@@ -269,7 +270,7 @@ function deleteGameUsers(gameId) {
 
 function updateGameUsers(players, gameId) {
     const promises = players.map(userId => {
-        return axios.put(`http://localhost:8080/games-details/${gameId}/users`, {userId})
+        return axios.put(`${API_URL}/games-details/${gameId}/users`, {userId})
         .then((response) => {
             const data = response.data;
             console.log(`Jugador ${userId} modificado con éxito`, data);

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils';
+import { API_URL } from './config';
 
 const urlParams = new URLSearchParams(window.location.search);
 const boardgameId = urlParams.get('id');
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function getBoardgame(boardgameId) {
-    axios.get(`http://localhost:8080/boardgames/${boardgameId}`)
+    axios.get(`${API_URL}/boardgames/${boardgameId}`)
         .then((response) => {
             drawBoardgameData(response.data);
         })

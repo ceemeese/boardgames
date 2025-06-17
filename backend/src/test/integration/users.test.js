@@ -16,8 +16,8 @@ describe('users', () => {
             const user = {
                 name: `userName_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
                 surname: 'Integration',
-                email: 'test@mail.com',
-                alias: 'Test',
+                email: 'testIntegration@mail.com',
+                alias: 'TestIntegration',
                 password: '1234',
             };
 

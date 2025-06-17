@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { notifyOK, notifyKO } from './utils.js';
+import { API_URL } from './config';
 
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function getBoardgame(boardgameId) {
-    axios.get(`http://localhost:8080/boardgames/${boardgameId}`)
+    axios.get(`${API_URL}/boardgames/${boardgameId}`)
         .then((response) => {
             drawBoardgameData(response.data);
         })
@@ -42,7 +43,7 @@ function getBoardgame(boardgameId) {
 
 function postBoardgame(datos) {
     console.log('Datos enviados al backend:', datos);
-    axios.post('http://localhost:8080/boardgames', datos)
+    axios.post(`${API_URL}/boardgames`, datos)
         .then((response) => {
             const data = response.data;
             console.log('Juego añadido con éxito:', data);
@@ -60,7 +61,7 @@ function postBoardgame(datos) {
 
 function updateBoardgame(datos) {
     console.log('Datos enviados al backend:', datos);
-    axios.put(`http://localhost:8080/boardgames/${boardgameId}`, datos)
+    axios.put(`${API_URL}/boardgames/${boardgameId}`, datos)
         .then((response) => {
             const data = response.data;
             console.log('Juego modificado con éxito:', data);

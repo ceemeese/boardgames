@@ -12,7 +12,7 @@ describe('Game-User', () => {
 
     describe('POST /gamesUsers', () => {
         it('Registrar relación Partida-Usuario y código 201', (done) => {
-            const gameId = 23;
+            const gameId = 1;
             const gameUser = {
                 userId: 1,
             };
@@ -56,7 +56,7 @@ describe('Game-User', () => {
 
     describe('DELETE /gameUsers', () => {
         it('Crear y eliminar relacion partida-jugador y código 204', (done) => {
-            const gameId = 23;
+            const gameId = 1;
             const gameUser = {
                 userId: 1
             };
