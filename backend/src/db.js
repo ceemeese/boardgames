@@ -1,5 +1,5 @@
 const knex = require('knex');
-const { config } = require('../config/configuration');
+const config  = require('./config/configuration');
 
 //conexión con la db
 const db = knex({
@@ -13,5 +13,6 @@ const db = knex({
     },
     useNullAsDefault: true
 })
+
 
 module.exports = db;
