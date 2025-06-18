@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -26,8 +26,22 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
-    - run: docker compose -f backend/docker-compose.dev.yaml up -d
-    - run: sleep 3
-    - run: npm run unit-test
-    - run: npm run integration-test
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./backend
+
+    - name: Start database test
+      run: docker compose -f docker-compose.dev.yaml up -d
+      working-directory: ./backend
+
+    - name: Wait for db
+      run: sleep 3
+      working-directory: ./backend
+
+    - name: Run unit test
+      run: npm run unit-test
+      working-directory: ./backend
+
+    - name: Run integration test
+      run: npm run integration-test
+      working-directory: ./backend
