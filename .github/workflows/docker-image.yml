@@ -30,8 +30,8 @@ jobs:
         docker tag boardgame-api ceemeese/boardgames-backend:$TAG
         docker tag boardgame-web ceemeese/boardgames-frontend:$TAG
 
-        docker push ceemeese/boardgames-backend:$(date +%s)
-        docker push ceemeese/ceemeese/boardgames-frontend:$(date +%s)
+        docker push ceemeese/boardgames-backend:$TAG
+        docker push ceemeese/boardgames-frontend:$TAG
 
 
 
