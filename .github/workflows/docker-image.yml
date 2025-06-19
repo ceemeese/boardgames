@@ -27,8 +27,8 @@ jobs:
     - name: Tag and push images
       run: |
         TAG=$(date +%s)
-        docker tag boardgame-backend:latest ceemeese/boardgames-backend:$TAG
-        docker tag boardgame-frontend:latest ceemeese/boardgames-frontend:$TAG
+        docker tag boardgames-backend:latest ceemeese/boardgames-backend:$TAG
+        docker tag boardgames-frontend:latest ceemeese/boardgames-frontend:$TAG
 
         docker push ceemeese/boardgames-backend:$TAG
         docker push ceemeese/boardgames-frontend:$TAG
