@@ -22,7 +22,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Build backend and frontend images from docker-compose
-      run: docker compose -f docker-compose.yml build
+      run: docker compose -f docker-compose.yaml build
 
     - name: Tag and push images
       run: |
