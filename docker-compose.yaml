@@ -25,6 +25,7 @@ services:
       - network1
   web:
     build: ./frontend/
+    image: boardgames-frontend:latest
     container_name: boardgame-web
     ports: 
       - "1234:1234"
@@ -34,6 +35,7 @@ services:
       - API_BASE_URL=http://api:8080
   api:
     build: ./backend/
+    image: boardgames-backend:latest
     container_name: boardgame-api
     ports: 
       - "8080:8080"
