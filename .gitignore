@@ -1,3 +1,7 @@
+# Metrics
+grafana_data
+prometheus_data
+
 # Base de datos
 backend/boardgames.db
 

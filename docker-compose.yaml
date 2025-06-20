@@ -24,22 +24,21 @@ services:
     networks:
       - network1
   web:
-    build: ./frontend/
-    image: boardgames-frontend:latest
+    image: ceemeese/boardgames-frontend:1750327519
     container_name: boardgame-web
     ports: 
       - "1234:1234"
     networks:
       - network1
     environment:
-      - API_BASE_URL=http://api:8080
+      - API_BASE_URL
   api:
-    build: ./backend/
-    image: boardgames-backend:latest
+    image: ceemeese/boardgames-backend:1750327519
     container_name: boardgame-api
     ports: 
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - network1
