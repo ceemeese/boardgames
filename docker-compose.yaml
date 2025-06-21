@@ -24,7 +24,7 @@ services:
     networks:
       - network1
   web:
-    image: ceemeese/boardgames-frontend:1750327519
+    image: ceemeese/boardgames-frontend:latest
     container_name: boardgame-web
     ports: 
       - "1234:1234"
@@ -33,7 +33,7 @@ services:
     environment:
       - API_BASE_URL
   api:
-    image: ceemeese/boardgames-backend:1750327519
+    image: ceemeese/boardgames-backend:latest
     container_name: boardgame-api
     ports: 
       - "8080:8080"
