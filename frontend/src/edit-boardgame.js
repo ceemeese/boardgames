@@ -43,18 +43,23 @@ function getBoardgame(boardgameId) {
 
 function postBoardgame(datos) {
     console.log('Datos enviados al backend:', datos);
-    axios.post(`${API_URL}/boardgames`, datos)
-        .then((response) => {
-            const data = response.data;
-            console.log('Juego añadido con éxito:', data);
-            notifyOK('Juego registrado correctamente');
-            form.reset();
-            return data;
-        })
     
-        .catch((error) => {
-            console.error('Error fetching boardgames:', error);
+    axios.post(`${API_URL}/boardgames`, datos, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
         }
+    })
+    .then((response) => {
+        const data = response.data;
+        console.log('Juego añadido con éxito:', data);
+        notifyOK('Juego registrado correctamente');
+        form.reset();
+        return data;
+    })
+
+    .catch((error) => {
+        console.error('Error fetching boardgames:', error);
+    }
     )
 }
 
@@ -94,13 +99,20 @@ function drawBoardgameData(boardgame) {
 
 
 function getFormData() {
-    return {
-        name: document.querySelector("#name").value,
-        description: document.querySelector("#description").value,
-        minPlayers: document.querySelector("#minPlayers").value,
-        maxPlayers: document.querySelector("#maxPlayers").value,
-        category: document.querySelector("#category").value,
-    };
+
+    const formData = new FormData();
+    formData.append('name', document.querySelector("#name").value);
+    formData.append('description', document.querySelector("#description").value);
+    formData.append('minPlayers', document.querySelector("#minPlayers").value);
+    formData.append('maxPlayers', document.querySelector("#maxPlayers").value);
+    formData.append('category', document.querySelector("#category").value);
+    
+    const imageFile = document.querySelector("#image").files[0];
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    return formData;
 }
 
 
@@ -108,7 +120,10 @@ function getFormData() {
 form.addEventListener('submit', function (event){
     event.preventDefault();
 
-    const inputsForm = getFormData();
+    const inputsForm = getFormData()
+
+    console.log('ASI SE VE EL INPUTS FORM', inputsForm);
+    
 
     const isValid = validationForm(inputsForm);
 
@@ -128,15 +143,21 @@ form.addEventListener('submit', function (event){
 
 function validationForm(boardgame) {
 
-    const minPlayers = parseInt(boardgame.minPlayers, 10);
-    const maxPlayers = parseInt(boardgame.maxPlayers, 10);
+    const minPlayers = parseInt(boardgame.get('minPlayers'), 10);
+    const maxPlayers = parseInt(boardgame.get('maxPlayers'), 10);
 
-    if (!boardgame.name || boardgame.name.trim() === '') {
+    console.log(boardgame.get('minPlayers'));
+    
+    console.log(minPlayers);
+    console.log(maxPlayers)
+    console.log(boardgame.get('name'));
+    
+    if (!boardgame.get('name') || boardgame.get('name').trim() === '') {
         notifyKO('El nombre no puede estar vacío')
         return false;
     }
 
-    if (isNaN(minPlayers) || maxPlayers <= 0) {
+    if (isNaN(minPlayers) || minPlayers <= 0) {
         notifyKO('El número mínimo de jugadores debe ser un número mayor que 0.')
         return false;
     }
@@ -148,6 +169,11 @@ function validationForm(boardgame) {
 
     if (minPlayers > maxPlayers) {
         notifyKO('El número mínimo de jugadores no puede ser mayor al máximo.')
+        return false;
+    }
+
+    if (!boardgame.get('image')) {
+        notifyKO('La imagen es obligatoria')
         return false;
     }
 

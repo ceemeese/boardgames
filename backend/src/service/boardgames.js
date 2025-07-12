@@ -9,13 +9,14 @@ const findBoardgame = (async (id) => {
     return await db('boardgames').select('*').where({id: id}).first();
 })
 
-const registerBoardgame = (async (name, description, minPlayers, maxPlayers, category) => {
+const registerBoardgame = (async (name, description, minPlayers, maxPlayers, category, nameImage) => {
     const [id] = await db('boardgames').insert({
         name: name,
         description: description,
         minPlayers: minPlayers,
         maxPlayers: maxPlayers,
-        category: category
+        category: category,
+        nameImage: nameImage
     });
 
     return id;

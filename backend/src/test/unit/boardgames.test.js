@@ -1,10 +1,16 @@
 //const expect = require('chai').expect;
-const { getBoardgames, getBoardgame, postBoardgame, putBoardgame, deleteBoardgame } = require('../../controller/boardgames');
+const { getBoardgames, getBoardgame, postBoardgame, putBoardgame, deleteBoardgame, randomImageName } = require('../../controller/boardgames');
 const { findBoardgames, findBoardgame, registerBoardgame, modifyBoardgame, removeBoardgame } = require('../../service/boardgames');
 const { validationResult } = require('express-validator');
+const { s3 } = require('../../utils/s3');
 
 jest.mock('../../service/boardgames');
 jest.mock('express-validator');
+jest.mock('../../utils/s3', () => ({
+    s3: {
+        send: jest.fn().mockResolvedValue({}), // evita subir a AWS
+    }
+}));
 
 describe('boardgames controller', () => {
 
@@ -51,14 +57,23 @@ describe('boardgames controller', () => {
     it('postBoardgame debería devolver elemento completo con código 201', async () => {
         const fakeId = 1;
 
-        req.body = {
-            name: 'Catan',
-            description: 'Juego de estrategia',
-            minPlayers: 1,
-            maxPlayers: 4,
-            category: 'Estrategia'
+        const req = {
+            body: {
+                name: 'Catan',
+                description: 'Juego de estrategia',
+                minPlayers: 1,
+                maxPlayers: 4,
+                category: 'Estrategia',
+            },
+            file: {
+                buffer: Buffer.from('fake-image-data'),
+                mimetype: 'image/jpeg',
+                name: expect.any(String)
+            }
         };
+
         validationResult.mockReturnValue({ isEmpty: () => true });
+
         registerBoardgame.mockResolvedValue(fakeId);
 
         await postBoardgame(req, res);
@@ -69,7 +84,8 @@ describe('boardgames controller', () => {
             'Juego de estrategia',
             1,
             4,
-            'Estrategia'
+            'Estrategia',
+            expect.any(String) // nombre de la imagen aleatoria
         );
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.json).toHaveBeenCalledWith({
@@ -78,7 +94,9 @@ describe('boardgames controller', () => {
             description: req.body.description, 
             minPlayers: req.body.minPlayers, 
             maxPlayers: req.body.maxPlayers, 
-            category: req.body.category});
+            category: req.body.category,
+            nameImage: expect.any(String), // nombre de la imagen
+        });
     });
 
 

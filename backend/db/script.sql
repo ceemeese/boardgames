@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS boardgames (
 	description VARCHAR(255),
 	minPlayers INTEGER NOT NULL,
 	maxPlayers INTEGER NOT NULL,
-	category VARCHAR(255)
+	category VARCHAR(255),
+	nameImage VARCHAR(255)
 );
 CREATE TABLE IF NOT EXISTS games (
 	id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -32,12 +33,12 @@ CREATE TABLE IF NOT EXISTS gamesUsers (
 	FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO boardgames (name,description,minPlayers,maxPlayers,category) VALUES ('Carcassonne','Descripción de Carcassonne',2,5,'Gestión de recursos'),
- ('7Wonders','Descripción 7Wonders',3,7,'Draft de cartas'),
- ('Catán','Descripción Catán',3,7,'Control de area'),
- ('Welcome','Descripción Welcome',1,10,'Roll & Write'),
- ('Patchwork','Descripción Patchwork',2,2,'Puzzle'),
- ('Explodding Kittens','Descripción Explodding Kittens',2,5,'Filler');
+INSERT INTO boardgames (name,description,minPlayers,maxPlayers,category, nameImage) VALUES ('Carcassonne','Descripción de Carcassonne',2,5,'Gestión de recursos', 'carcassone.png'),
+ ('7Wonders','Descripción 7Wonders',3,7,'Draft de cartas', '7wonders.png'),
+ ('Catán','Descripción Catán',3,7,'Control de area', 'catan.png'),
+ ('Welcome','Descripción Welcome',1,10,'Roll & Write', 'welcome.png'),
+ ('Patchwork','Descripción Patchwork',2,2,'Puzzle', 'patchwork.png'),
+ ('Explodding Kittens','Descripción Explodding Kittens',2,5,'Filler', 'explodding.png');
 
 INSERT INTO games (name,boardgameId) VALUES ('Partida 1',1),
  ('Partida 2',2), ('Partida 3',3), ('Partida 4',4), ('Partida 5',5), ('Partida 6',6);
