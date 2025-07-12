@@ -1,19 +1,50 @@
 const {findBoardgames, findBoardgame, registerBoardgame, modifyBoardgame, removeBoardgame} = require('../service/boardgames');
 const { validationResult } = require('express-validator');
-const { putObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const {s3, bucketName} = require('../utils/s3');
 const crypto = require('crypto');
+const sharp = require('sharp');
+
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+
+
 
 const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
 const getBoardgames = (async (req, res) => {
     const boardgamesList = await findBoardgames();
+
+    for(const boardgame of boardgamesList) {
+        const getObjectParams = {
+            Bucket: bucketName,
+            Key: boardgame.nameImage
+        }
+
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        boardgame.imageUrl = url;  //Se guarda en memoria en una propiedad nueva
+    };
+
+    
     res.status(200).json(boardgamesList);
 })
 
 const getBoardgame = (async (req, res) => {
     try {
         const boardgame = await findBoardgame(req.params.id);
+
+        const getObjectParams = {
+            Bucket: bucketName,
+            Key: boardgame.nameImage
+        }
+
+        const command = new GetObjectCommand(getObjectParams);
+        console.log('Preparando comando para obtener URL firmada');
+        
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        boardgame.imageUrl = url; 
+        console.log(boardgame.imageUrl + ' URL de imagen firmada');
+         //Se guarda en memoria en una propiedad nueva
 
         if(boardgame === undefined) {
             res.status(404).json({
@@ -22,6 +53,7 @@ const getBoardgame = (async (req, res) => {
             })
             return;
         }
+
         res.status(200).json(boardgame);
     } catch (error) {
         res.status(500).json({
@@ -60,17 +92,27 @@ const postBoardgame = (async (req, res) => {
         const imageName = randomImageName();
         console.log(imageName + 'Nombre de imagen aleatorio');
 
-        
+
+        //Procesamiento de imagen
+        const buffer = await sharp(req.file.buffer)
+            .resize({
+                height: 1024, 
+                width: 710,
+                fit: "contain"
+            })
+            .toBuffer()
+        console.log('Imagen procesada con sharp');
+
+
         //Subida a S3
         const params = {
             Bucket: bucketName,
             Key: imageName,
-            Body: req.file.buffer,
+            Body: buffer,
             ContentType: req.file.mimetype
         }
 
         console.log('Preparando subida a S3');
-    
         const command = new PutObjectCommand(params);
         console.log(command.Body + ' Commando de subida a S3');
         

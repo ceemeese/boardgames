@@ -33,12 +33,12 @@ CREATE TABLE IF NOT EXISTS gamesUsers (
 	FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO boardgames (name,description,minPlayers,maxPlayers,category, nameImage) VALUES ('Carcassonne','Descripción de Carcassonne',2,5,'Gestión de recursos', 'carcassone.png'),
- ('7Wonders','Descripción 7Wonders',3,7,'Draft de cartas', '7wonders.png'),
- ('Catán','Descripción Catán',3,7,'Control de area', 'catan.png'),
- ('Welcome','Descripción Welcome',1,10,'Roll & Write', 'welcome.png'),
- ('Patchwork','Descripción Patchwork',2,2,'Puzzle', 'patchwork.png'),
- ('Explodding Kittens','Descripción Explodding Kittens',2,5,'Filler', 'explodding.png');
+INSERT INTO boardgames (name,description,minPlayers,maxPlayers,category, nameImage) VALUES ('Carcassonne','Descripción de Carcassonne',2,5,'Gestión de recursos', 'carcasssone.webp'),
+ ('7Wonders','Descripción 7Wonders',3,7,'Draft de cartas', '7wonders.webp'),
+ ('Catán','Descripción Catán',3,7,'Control de area', 'catan.webp'),
+ ('Welcome','Descripción Welcome',1,10,'Roll & Write', 'welcome.webp'),
+ ('Patchwork','Descripción Patchwork',2,2,'Puzzle', 'patchwork.webp'),
+ ('Explodding Kittens','Descripción Explodding Kittens',2,5,'Filler', 'explodding.webp');
 
 INSERT INTO games (name,boardgameId) VALUES ('Partida 1',1),
  ('Partida 2',2), ('Partida 3',3), ('Partida 4',4), ('Partida 5',5), ('Partida 6',6);

@@ -3,13 +3,21 @@ const { getBoardgames, getBoardgame, postBoardgame, putBoardgame, deleteBoardgam
 const { findBoardgames, findBoardgame, registerBoardgame, modifyBoardgame, removeBoardgame } = require('../../service/boardgames');
 const { validationResult } = require('express-validator');
 const { s3 } = require('../../utils/s3');
+const path = require('path');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 jest.mock('../../service/boardgames');
 jest.mock('express-validator');
+//jest.mock('@aws-sdk/s3-request-presigner');
 jest.mock('../../utils/s3', () => ({
     s3: {
         send: jest.fn().mockResolvedValue({}), // evita subir a AWS
+
     }
+}));
+
+jest.mock('@aws-sdk/s3-request-presigner', () => ({
+  getSignedUrl: jest.fn().mockResolvedValue('https://fake-s3-url.com')
 }));
 
 describe('boardgames controller', () => {
@@ -28,14 +36,23 @@ describe('boardgames controller', () => {
 
 
     it('getBoardgames debería devolver listado con código 200', async () => {
+        
         const boardgamesFake = [{ id: 1, name: 'Catan' }, { id: 2, name: 'Carcassone' }];
         findBoardgames.mockResolvedValue(boardgamesFake);
 
         await getBoardgames(req, res);
 
         expect(findBoardgames).toHaveBeenCalled();
+        expect(getSignedUrl).toHaveBeenCalledTimes(2);
+
+        const expectedResponse = boardgamesFake.map(bg => ({
+            ...bg,
+            imageUrl: 'https://fake-s3-url.com'
+        }));
+
+
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(boardgamesFake);
+        expect(res.json).toHaveBeenCalledWith(expectedResponse);
     });
 
 
@@ -49,13 +66,15 @@ describe('boardgames controller', () => {
         await getBoardgame(req, res);
 
         expect(findBoardgame).toHaveBeenCalledWith(1);
+        expect(getSignedUrl).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(boardgameFake);
+        expect(res.json).toHaveBeenCalledWith({...boardgameFake, imageUrl: 'https://fake-s3-url.com'});
     });
 
 
     it('postBoardgame debería devolver elemento completo con código 201', async () => {
         const fakeId = 1;
+        const imagePath = path.join(__dirname, 'patchwork.png');
 
         const req = {
             body: {
@@ -66,14 +85,14 @@ describe('boardgames controller', () => {
                 category: 'Estrategia',
             },
             file: {
-                buffer: Buffer.from('fake-image-data'),
+                buffer: imagePath,
                 mimetype: 'image/jpeg',
                 name: expect.any(String)
             }
         };
 
         validationResult.mockReturnValue({ isEmpty: () => true });
-
+        
         registerBoardgame.mockResolvedValue(fakeId);
 
         await postBoardgame(req, res);

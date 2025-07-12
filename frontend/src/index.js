@@ -56,7 +56,7 @@ const drawData = (boardgamesList) => {
         const cardHTML = `
             <div class="col" id="game-${boardgame.id}" data-id="${boardgame.id}">
                 <div class="card shadow-sm">
-                    <img alt="${boardgame.name}" width="100%" height="225"/>
+                    <img alt="${boardgame.name}" src="${boardgame.imageUrl}" width="100%" height="300"/>
                     <div class="card-body">
                         <p class="card-text">${boardgame.name}</p>
                         <small>${boardgame.description}</small></br>
