@@ -1,6 +1,6 @@
 const {findBoardgames, findBoardgame, registerBoardgame, modifyBoardgame, removeBoardgame} = require('../service/boardgames');
 const { validationResult } = require('express-validator');
-const { PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { PutObjectCommand, GetObjectCommand, S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const {s3, bucketName} = require('../utils/s3');
 const crypto = require('crypto');
 const sharp = require('sharp');
@@ -114,7 +114,6 @@ const postBoardgame = (async (req, res) => {
 
         console.log('Preparando subida a S3');
         const command = new PutObjectCommand(params);
-        console.log(command.Body + ' Commando de subida a S3');
         
 
         await s3.send(command);
@@ -188,6 +187,27 @@ const deleteBoardgame = (async (req, res) => {
             })
         }
 
+        const boardgame = await findBoardgame(req.params.id);
+        if(!boardgame) {
+            return res.status(404).json({
+                status: 'No encontrado',
+                message: 'Boardgame no encontrado'
+            });
+        }
+
+        const deleteParams = {
+            Bucket: bucketName,
+            Key: boardgame.nameImage,
+        };
+
+
+        try {
+            await s3.send(new DeleteObjectCommand(deleteParams))
+            console.log('Imagen eliminada de S3');
+        } catch (error) {
+            console.error('Error al eliminar la imagen de S3:', error);
+        }
+        
         const result = await removeBoardgame(req.params.id);
 
         if(result === 0) {

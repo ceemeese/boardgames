@@ -45,6 +45,7 @@ describe('boardgames controller', () => {
         expect(findBoardgames).toHaveBeenCalled();
         expect(getSignedUrl).toHaveBeenCalledTimes(2);
 
+        //se mapea para guardar el objeto en memoria con la imageUrl
         const expectedResponse = boardgamesFake.map(bg => ({
             ...bg,
             imageUrl: 'https://fake-s3-url.com'
@@ -149,15 +150,18 @@ describe('boardgames controller', () => {
     });
 
 
-        it('deleteBoardgame debería devolver respuesta vacía con código 204', async () => {
+    it('deleteBoardgame debería devolver respuesta vacía con código 204', async () => {
         req.params = {id : 1}
 
         validationResult.mockReturnValue({ isEmpty: () => true });
-        removeBoardgame.mockResolvedValue();
+        findBoardgame.mockResolvedValue({ nameImage: 'imagen.jpg' });
+        removeBoardgame.mockResolvedValue(1);
 
         await deleteBoardgame(req, res);
 
         expect(validationResult).toHaveBeenCalledWith(req);
+        expect(findBoardgame).toHaveBeenCalledWith(1);
+        expect(s3.send).toHaveBeenCalled();
         expect(removeBoardgame).toHaveBeenCalledWith(1);
         expect(res.status).toHaveBeenCalledWith(204);
         expect(res.json).toHaveBeenCalledWith({});
