@@ -22,13 +22,14 @@ const registerBoardgame = (async (name, description, minPlayers, maxPlayers, cat
     return id;
 })
 
-const modifyBoardgame = (async (id, name, description, minPlayers, maxPlayers, category) => {
+const modifyBoardgame = (async (id, name, description, minPlayers, maxPlayers, category, nameImage) => {
     await db('boardgames').update({
         name: name,
         description: description,
         minPlayers: minPlayers,
         maxPlayers: maxPlayers,
-        category: category
+        category: category,
+        nameImage: nameImage
     }).where({id: id})
 })
 

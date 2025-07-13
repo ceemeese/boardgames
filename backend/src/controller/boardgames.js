@@ -150,12 +150,71 @@ const postBoardgame = (async (req, res) => {
 const putBoardgame = (async (req, res) => {
 
     try {
+        console.log('Entrando a putBoardgame');
+        
         const errors = validationResult(req);
+        console.log('Errores de validación en modificación');
+        
         if(!errors.isEmpty()) {
+            console.log('Errores de validación encontrados:', errors.array());
             return res.status(400).json({
                 status: 'Error',
                 message: errors.array()
             })
+        }
+
+        //Buscar juego para obtener nombre de imagen
+        const boardgame = await findBoardgame(req.params.id);
+        
+            if(!boardgame) {
+                return res.status(404).json({
+                    status: 'No encontrado',
+                    message: 'Boardgame no encontrado'
+                });
+            }
+        
+        let imageName = boardgame.nameImage;
+
+        if (req.file) {
+            const deleteParams = {
+                Bucket: bucketName,
+                Key: boardgame.nameImage,
+            };
+
+            try {
+                await s3.send(new DeleteObjectCommand(deleteParams))
+                console.log('Imagen eliminada de S3');
+            } catch (error) {
+                console.error('Error al eliminar la imagen de S3:', error);
+            }
+
+            imageName = randomImageName();
+            console.log(imageName + 'Nombre de nueva imagen aleatorio');
+
+            //Procesamiento de imagen
+            const buffer = await sharp(req.file.buffer)
+                .resize({
+                    height: 1024, 
+                    width: 710,
+                    fit: "contain"
+                })
+                .toBuffer()
+            console.log('Imagen procesada con sharp');
+
+            //Subida a S3
+            const params = {
+                Bucket: bucketName,
+                Key: imageName,
+                Body: buffer,
+                ContentType: req.file.mimetype
+            }
+
+            console.log('Preparando subida a S3');
+            const command = new PutObjectCommand(params);
+            
+            await s3.send(command);
+            console.log('Subida S3');
+            
         }
 
         await modifyBoardgame(
@@ -164,7 +223,8 @@ const putBoardgame = (async (req, res) => {
             req.body.description, 
             req.body.minPlayers, 
             req.body.maxPlayers, 
-            req.body.category
+            req.body.category,
+            imageName
         );
 
         res.status(204).json({});

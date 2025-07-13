@@ -92,7 +92,7 @@ describe('boardgames', () => {
 
 
     describe('PUT /boardgames', () => {
-        it('Modificar nuevo juego y código 204', (done) => {
+        it('Modificar nuevo juego sin cambiar imagen y código 204', (done) => {
             const boardgame = {
                 name: `boardgameName_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
                 description: 'boardgame description',
@@ -101,7 +101,7 @@ describe('boardgames', () => {
                 category: 'Rol'
             };
 
-            const id = 38;
+            const id = 1;
             chai.request(app)
                 .put(`/boardgames/${id}`)
                 .send(boardgame)

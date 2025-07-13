@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/boardgames', getBoardgames);
 router.get('/boardgames/:id', boardgameIdValidation, getBoardgame);
 router.post('/boardgames',upload.single('image'), boardgameValidation,  postBoardgame);
-router.put('/boardgames/:id', boardgameIdValidation, boardgameValidation, putBoardgame);
+router.put('/boardgames/:id',upload.single('image'), boardgameIdValidation, boardgameValidation, putBoardgame);
 router.delete('/boardgames/:id', boardgameIdValidation, deleteBoardgame);
 
 

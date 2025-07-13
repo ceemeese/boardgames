@@ -1,9 +1,10 @@
 //const expect = require('chai').expect;
 const { getBoardgames, getBoardgame, postBoardgame, putBoardgame, deleteBoardgame, randomImageName } = require('../../controller/boardgames');
 const { findBoardgames, findBoardgame, registerBoardgame, modifyBoardgame, removeBoardgame } = require('../../service/boardgames');
-const { validationResult } = require('express-validator');
+const { validationResult, param } = require('express-validator');
 const { s3 } = require('../../utils/s3');
 const path = require('path');
+const fs = require('fs');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 jest.mock('../../service/boardgames');
@@ -76,6 +77,7 @@ describe('boardgames controller', () => {
     it('postBoardgame debería devolver elemento completo con código 201', async () => {
         const fakeId = 1;
         const imagePath = path.join(__dirname, 'patchwork.png');
+        const imageBuffer = fs.readFileSync(imagePath);
 
         const req = {
             body: {
@@ -86,7 +88,7 @@ describe('boardgames controller', () => {
                 category: 'Estrategia',
             },
             file: {
-                buffer: imagePath,
+                buffer: imageBuffer,
                 mimetype: 'image/jpeg',
                 name: expect.any(String)
             }
@@ -99,6 +101,7 @@ describe('boardgames controller', () => {
         await postBoardgame(req, res);
 
         expect(validationResult).toHaveBeenCalledWith(req);
+        expect(s3.send).toHaveBeenCalled();
         expect(registerBoardgame).toHaveBeenCalledWith(
             'Catan',
             'Juego de estrategia',
@@ -121,30 +124,45 @@ describe('boardgames controller', () => {
 
 
 
-    it('putBoardgame debería devolver respuesta vacía con código 204', async () => {
-        req.params = {id : 1}
-        req.body = {
-            name: 'Catan actu',
-            description: 'Juego de estrategia',
-            minPlayers: 1,
-            maxPlayers: 4,
-            category: 'Estrategia'
-        };
+    it('putBoardgame con modificacion de imagen debería devolver respuesta vacía con código 204', async () => {
+        const imagePath = path.join(__dirname, 'patchwork.png');
+        const imageBuffer = fs.readFileSync(imagePath);
+
+        const req = {
+            params: { id: 1 },
+            body: {
+                name: 'Catan actu',
+                description: 'Juego de estrategia',
+                minPlayers: 1,
+                maxPlayers: 4,
+                category: 'Estrategia',
+            },
+            file: {
+                buffer: imageBuffer,
+                mimetype: 'image/jpeg',
+                name: expect.any(String)
+            }
+        } 
 
         validationResult.mockReturnValue({ isEmpty: () => true });
+        findBoardgame.mockResolvedValue({ nameImage: 'imagen.jpg' });
         modifyBoardgame.mockResolvedValue();
 
         await putBoardgame(req, res);
 
         expect(validationResult).toHaveBeenCalledWith(req);
+        expect(findBoardgame).toHaveBeenCalledWith(1);
+        expect(s3.send).toHaveBeenCalledTimes(2);
         expect(modifyBoardgame).toHaveBeenCalledWith(
             1,
             'Catan actu',
             'Juego de estrategia',
             1,
             4,
-            'Estrategia'
+            'Estrategia',
+            expect.any(String)
         );
+
         expect(res.status).toHaveBeenCalledWith(204);
         expect(res.json).toHaveBeenCalledWith({});
     });
