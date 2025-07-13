@@ -3,7 +3,7 @@
     "version": "0.1",
     "description": "Boardgames application",
     "scripts": {
-        "unit-test": "jest --verbose src/test/unit",
+        "unit-test": "jest --coverage --verbose src/test/unit",
         "integration-test": "NODE_ENV=local mocha src/test/integration --timeout 20000 --exit",
         "test": "npm run unit-test && npm run integration-test",
         "start": "node src/app.js",
