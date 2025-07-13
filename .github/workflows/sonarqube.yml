@@ -18,8 +18,16 @@ jobs:
         run: npm install
         working-directory: ./backend
 
-      - name: Run unit & integration tests
-        run: make start-all-test
+      - name: Run Docker DB
+        run: npm run database:test
+        working-directory: ./backend
+
+      - name: Run unit test
+        run: npm start unit-test
+        working-directory: ./backend
+
+      - name: Run integration test
+        run: npm start integration-test
         working-directory: ./backend
 
       - name: Check coverage files
