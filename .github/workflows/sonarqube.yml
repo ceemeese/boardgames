@@ -23,11 +23,11 @@ jobs:
         working-directory: ./backend
 
       - name: Run unit test
-        run: npm start unit-test
+        run: npm run unit-test
         working-directory: ./backend
 
       - name: Run integration test
-        run: npm start integration-test
+        run: npm run integration-test
         working-directory: ./backend
 
       - name: Check coverage files
