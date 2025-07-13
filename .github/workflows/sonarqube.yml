@@ -22,6 +22,9 @@ jobs:
         run: npm run database:test
         working-directory: ./backend
 
+      - name: Esperar a que la DB esté lista
+        run: sleep 10
+
       - name: Run unit test
         run: npm run unit-test
         working-directory: ./backend
