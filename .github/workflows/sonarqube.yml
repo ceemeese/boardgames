@@ -18,8 +18,8 @@ jobs:
         run: npm install
         working-directory: ./backend
 
-      - name: Run unit tests
-        run: npm run unit-test
+      - name: Run unit & integration tests
+        run: make start-all-test
         working-directory: ./backend
 
       - name: Check coverage files
