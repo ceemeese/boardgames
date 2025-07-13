@@ -14,6 +14,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+      SECRET_ACCESS: ${{ secrets.SECRET_ACCESS }}
+      BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+      BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+      SESSION_TOKEN: ${{ secrets.SESSION_TOKEN }}
+
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]

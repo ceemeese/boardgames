@@ -148,8 +148,8 @@ function validationForm(boardgame) {
 
     console.log(boardgame.get('minPlayers'));
     
-    console.log(minPlayers);
-    console.log(maxPlayers)
+    console.log('Validacion:' + minPlayers);
+    console.log('Validacion:' +maxPlayers)
     console.log(boardgame.get('name'));
     
     if (!boardgame.get('name') || boardgame.get('name').trim() === '') {
@@ -172,7 +172,7 @@ function validationForm(boardgame) {
         return false;
     }
 
-    if (!boardgame.get('image')) {
+    if (!boardgame.get('image') && !boardgameId) {
         notifyKO('La imagen es obligatoria')
         return false;
     }
