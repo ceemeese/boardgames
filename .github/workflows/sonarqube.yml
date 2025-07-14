@@ -9,10 +9,47 @@ jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
+    env:
+      ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+      SECRET_ACCESS: ${{ secrets.SECRET_ACCESS }}
+      BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+      BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+      SESSION_TOKEN: ${{ secrets.SESSION_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend
+
+      - name: Start database test
+        run: docker compose -f docker-compose.dev.yaml up -d
+        working-directory: ./backend
+
+      - name: Esperar a que la DB esté lista
+        run: sleep 5
+
+      - name: Run unit test
+        run: npm run unit-test
+        working-directory: ./backend
+
+      - name: Run integration test
+        run: npm run integration-test
+        working-directory: ./backend
+
+      - name: Generate coverage report
+        run: npm run coverage:report
+        working-directory: ./backend
+
+      - name: Merge coverage reports
+        run: npm run coverage:merge
+        working-directory: ./backend  
+
+      - name: Check coverage files
+        run: ls -l ./backend/coverage
+          
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:

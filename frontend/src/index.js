@@ -29,11 +29,13 @@ function deleteBoardgame(boardgameId) {
     axios.delete(`${API_URL}/boardgames/${boardgameId}`)
         .then((response) => {
             console.log('Juego eliminado con éxito');
+            notifyOK('Juego eliminado correctamente');
             getListBoardgames();
         })
         .catch((error) => {
             if (error.response) {
                 if (error.response.status === 404) {
+                    notifyOK('Juego eliminado correctamente');
                     console.error('404, Juego no encontrado');
                 } else if (error.response.status === 500) {
                     console.error('500, Error interno del servidor');
@@ -56,7 +58,7 @@ const drawData = (boardgamesList) => {
         const cardHTML = `
             <div class="col" id="game-${boardgame.id}" data-id="${boardgame.id}">
                 <div class="card shadow-sm">
-                    <img alt="${boardgame.name}" width="100%" height="225"/>
+                    <img alt="${boardgame.name}" src="${boardgame.imageUrl}" width="100%" height="300"/>
                     <div class="card-body">
                         <p class="card-text">${boardgame.name}</p>
                         <small>${boardgame.description}</small></br>

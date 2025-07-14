@@ -29,10 +29,10 @@ function drawBoardgameData(boardgame) {
     const container = document.getElementById('sectionBoardgameDetail');
 
     const cardHTML = `
-        <div class="card mx-auto shadow" style="max-width: 600px;">
+        <div class="card mx-auto shadow" style="max-width: 400px;">
                 <div class="card-body text-center">
                     <div class="game-image-container mb-4">
-                        <img src="https://via.placeholder.com/400x600?text=Imagen+del+Juego" alt="Imagen del juego" />
+                        <img src="${boardgame.imageUrl}" alt="Imagen del juego" width="100%" height="400" />
                     </div>
                     <h2 class="card-title mb-3">${boardgame.name}</h2>
                     <p class="card-text text-muted mb-4">${boardgame.description}</p>
