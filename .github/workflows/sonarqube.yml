@@ -24,12 +24,12 @@ jobs:
         run: npm install
         working-directory: ./backend
 
-      - name: Run Docker DB
-        run: npm run database:test
+      - name: Start database test
+        run: docker compose -f docker-compose.dev.yaml up -d
         working-directory: ./backend
 
       - name: Esperar a que la DB esté lista
-        run: sleep 10
+        run: sleep 5
 
       - name: Run unit test
         run: npm run unit-test
@@ -38,6 +38,14 @@ jobs:
       - name: Run integration test
         run: npm run integration-test
         working-directory: ./backend
+
+      - name: Generate coverage report
+        run: npm run coverage:report
+        working-directory: ./backend
+
+      - name: Merge coverage reports
+        run: npm run coverage:merge
+        working-directory: ./backend  
 
       - name: Check coverage files
         run: ls -l ./backend/coverage
