@@ -57,7 +57,35 @@
             "src/**/*.js"
         ],
         "exclude": [
-            "test/**/*.js"
+            "test/**/*.js",
+            "package.json",
+            "**/*.config.js",
+            "**/*.json",
+            "node_modules",
+            "db",
+            "**/src/test/**"
+        ]
+    },
+    "jest": {
+        "collectCoverage": true,
+        "collectCoverageFrom": [
+        "src/**/*.{js,ts,tsx}",
+        "!**/node_modules/**",
+        "!**/package.json",
+        "!**/*.config.js",
+        "!**/*.json",
+        "!**/db/*.sql",
+        "!**/src/config/**",
+        "!**/src/utils/**",
+        "!**/src/route/**",
+        "!**/src/validators/**",
+        "!**/src/middleware/**",
+        "!**/src/app"
+        ],
+        "coveragePathIgnorePatterns": [
+            "/node_modules/",
+            "package.json",
+            "\\.json$"
         ]
     }
 }
