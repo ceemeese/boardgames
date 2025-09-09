@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_URL } from './config';
+import { notifyOK, notifyKO } from './utils.js';
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -35,15 +36,20 @@ function deleteBoardgame(boardgameId) {
         .catch((error) => {
             if (error.response) {
                 if (error.response.status === 404) {
-                    notifyOK('Juego eliminado correctamente');
+                    notifyKO('Juego no encontrado');
                     console.error('404, Juego no encontrado');
                 } else if (error.response.status === 500) {
+                        notifyKO('Error interno del servidor');
                     console.error('500, Error interno del servidor');
+                } else {
+                    notifyKO('Error al realizar la solicitud');
+                    console.error('Error al realizar la solicitud:', error.message);
+                }
             } else {
-                console.error('Error al realizar la solicitud:', error.message);
+                notifyKO('Error de conexión con el servidor');
+                console.error('Error de red o sin respuesta del servidor:', error.message);
             }
-        }
-    })
+        })
 }
 
 

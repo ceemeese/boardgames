@@ -53,9 +53,22 @@ function postUser(datos) {
         })
     
         .catch((error) => {
-            console.error('Error fetching users:', error);
-        }
-    )
+            if (error.response) {
+                if (error.response.status === 404) {
+                    console.error('404, Usuario no encontrado');
+                    notifyKO('Usuario no encontrado');
+                } else if (error.response.status === 500) {
+                    console.error('500, Error interno del servidor');
+                    notifyKO('Error interno del servidor');
+                } else {
+                    console.error('Error al realizar la solicitud:', error.message);
+                    notifyKO('Error al realizar la solicitud');
+                }
+            } else {
+                console.error('Error de red o sin respuesta del servidor:', error.message);
+                notifyKO('Error de conexión con el servidor');
+            }
+        })
 }
 
 
@@ -72,7 +85,21 @@ function updateUser(datos) {
         })
     
         .catch((error) => {
-            console.error('Error fetching users:', error);
+            if (error.response) {
+                if (error.response.status === 404) {
+                    console.error('404, Usuario no encontrado');
+                    notifyKO('Usuario no encontrado');
+                } else if (error.response.status === 500) {
+                    console.error('500, Error interno del servidor');
+                    notifyKO('Error interno del servidor');
+                } else {
+                    console.error('Error al realizar la solicitud:', error.message);
+                    notifyKO('Error al realizar la solicitud');
+                }
+            } else {
+                console.error('Error de red o sin respuesta del servidor:', error.message);
+                notifyKO('Error de conexión con el servidor');
+            };
         }
     )
 }
