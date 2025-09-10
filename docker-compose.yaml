@@ -1,4 +1,3 @@
-version: '3.8'
 name: boardgames
 networks: 
   network1:
@@ -30,13 +29,13 @@ services:
       - "1234:1234"
     networks:
       - network1
-    environment:
-      - API_BASE_URL
   api:
     image: ceemeese/boardgames-backend:latest
     container_name: boardgame-api
     ports: 
       - "8080:8080"
+    env_file:
+      - ./backend/.env
     depends_on:
       db:
         condition: service_healthy

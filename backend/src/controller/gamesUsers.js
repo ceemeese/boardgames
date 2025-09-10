@@ -52,14 +52,15 @@ const deleteGameUsers = (async (req, res) => {
         
         const result = await removeUserByGame(req.params.gameId);
 
-        if(result === 0){
-            res.status(404).json({
-                status: 'No encontrado',
+        //TODO Se comenta porque no funciona en caso que la partida no tenga usuarios asociados
+       /* if(result === 0){
+            return res.status(404).json({
+                status: '',
                 message: 'Relación partida-usuario no encontrada'
             })
-        }
+        }*/
 
-        res.status(204).json({});
+        return res.status(204).json({});
     } catch (error) {
         res.status(500).json({
             message: 'Error interno del servidor'

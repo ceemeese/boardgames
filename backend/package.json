@@ -12,7 +12,7 @@
         "start-dev": "node src/app.js --config config.local.yaml",
         "start-prod": "node src/app.js --config config.prod.yaml",
         "database:test": "docker compose -f ./docker-compose.dev.yaml up -d",
-        "database:down": "docker compose -f ./docker-compose.dev.yaml down"
+        "database:down": "docker compose -f ./docker-compose.dev.yaml down -v"
     },
     "author": "Cristina Malmierca",
     "license": "GPL-2.0-only",
